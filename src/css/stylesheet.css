@@ -1,0 +1,44 @@
+#scene{
+    -fx-background-image: url("../images/clouds.gif") no-repeat center center fixed;
+    -fx-background-size: cover;
+}
+
+.button, #exitedB{
+    -fx-display: inline-block;
+    -fx-margin: 0.68em 0;
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), 2, 2, 2, 2);
+
+    -fx-background-radius: 10;
+    -fx-padding: 15 30 15 30;
+    -fx-text-fill: white;
+
+    -fx-font: 16px "AngryBirds";
+
+    -fx-background-color:
+        linear-gradient(#FFE5A4 0%, #FFE5A4 19%, #FFBD31 30%, #FFBD31 90%);
+}
+
+#hoverB{
+    -fx-display: inline-block;
+    -fx-margin: 0.68em 0;
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), 4, 4, 4, 4);
+
+    -fx-background-radius: 10;
+    -fx-padding: 15 30 15 30;
+    -fx-text-fill: white;
+
+    -fx-font: 40px "AngryBirds";
+
+    -fx-background-color:
+        linear-gradient(#FFE5A4 0%, #FFE5A4 19%, #FFBD31 30%, #FFBD31 90%);
+}
+
+#title{
+    -fx-font: 90px "AngryBirds";
+    -fx-fill: white;
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), 2, 2 , 2, 2);
+}
+
+.gridpane{
+    -fx-padding: 15 30 15 30;
+}
