@@ -78,7 +78,8 @@ public class Quoridor extends Application {
         rules.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Rules");
+                Rules rules=new Rules(primaryStage);
+                primaryStage.setScene(rules.getScene());
             }
         });
 
@@ -94,7 +95,7 @@ public class Quoridor extends Application {
         //root.getChildren().addAll(title,vbox);
 
         Scene scene = new Scene(root, 500, 500);
-        scene.getStylesheets().add("css/stylesheet.css");
+        scene.getStylesheets().add("css/mainmenu.css");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
