@@ -102,6 +102,7 @@ public class Quoridor extends Application {
 
     private void loadFont() {
         /*try {
+
          is = getClass().getResourceAsStream("/Font/angrybirds-regular.ttf");//AngryBirds
          font = Font.createFont(Font.TRUETYPE_FONT, is);
          } catch (IOException | FontFormatException ex) {
