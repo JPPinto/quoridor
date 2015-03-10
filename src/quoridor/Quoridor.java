@@ -22,18 +22,23 @@ public class Quoridor extends Application {
     public InputStream is;
     public Font font;
 
+    private Scene scene;
+
     public static void main(String[] args) {
-        Quoridor game = new Quoridor();
         launch(args);
     }
 
-    public Quoridor() {
-        loadFont();
-    }
+    public Quoridor() {}
 
     @Override
     public void start(final Stage primaryStage) {
         primaryStage.setTitle("Quoridor");
+        QuoridorInit(primaryStage);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public void QuoridorInit(final Stage primaryStage){
 
         FlowPane flow =new FlowPane();
         flow.setPadding(new Insets(50,0,0,0));
@@ -94,10 +99,8 @@ public class Quoridor extends Application {
         root.setCenter(vbox);
         //root.getChildren().addAll(title,vbox);
 
-        Scene scene = new Scene(root, 500, 500);
+        scene = new Scene(root, 500, 500);
         scene.getStylesheets().add("css/mainmenu.css");
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
     private void loadFont() {
@@ -110,7 +113,7 @@ public class Quoridor extends Application {
          }*/
     }
 
-    public void changeBackgroundOnHoverUsingEvents(final Node node) {
+    public static void changeBackgroundOnHoverUsingEvents(final Node node) {
         node.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -123,6 +126,10 @@ public class Quoridor extends Application {
                 node.setId("exitedB");
             }
         });
+    }
+
+    public Scene getScene(){
+        return scene;
     }
 
 }
