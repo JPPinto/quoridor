@@ -53,7 +53,8 @@ public class Quoridor extends Application {
         pvp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("1Pv2P");
+                GamePVP gamepvp=new GamePVP(primaryStage);
+                primaryStage.setScene(gamepvp.getScene());
             }
         });
 

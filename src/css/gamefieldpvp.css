@@ -1,0 +1,4 @@
+#root{
+    -fx-background-image: url("../images/clouds.gif") no-repeat center center fixed;
+    -fx-background-size: cover;
+}
