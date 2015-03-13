@@ -57,8 +57,17 @@ public class GamePVP {
                     board.setBoard(p2, p1,3);
                     board.printMatrix();
                 }
+                verifyWinning(p2);
             }
         });
+    }
+
+    public void verifyWinning(Pawn p){
+        if(p.getLine()==0 && p.getID()==1){
+            System.out.println("Player 1 - You win");
+        }else if(p.getLine()==0 && p.getID()==2){
+            System.out.println("Player 2 - You win");
+        }
     }
 
     public Scene getScene(){
