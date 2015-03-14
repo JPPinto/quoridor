@@ -6,7 +6,7 @@ package Logic;
 public class Board {
 
     public static enum BoardState {
-        UNPLAYABLE(0), EMPTY(1), HORIZONTAL_WALL(2), VERTICAL_WALL(3), PLAYER(4);
+        UNPLAYABLE(0), EMPTY(1), WALL(2), PLAYER(3);
 
         private final int value;
         private BoardState(int value) {
@@ -24,39 +24,39 @@ public class Board {
         initGame();
     }
 
-    public void setBoard(Pawn p1, Pawn p2, int direction){//0-up/1-down/2-left/3-right
+    public void setBoard(Pawn p, int direction){//0-up/1-down/2-left/3-right
         switch(direction){
             case 0:
-                board[p1.getLine()][p1.getColumn()]=BoardState.EMPTY;
-                p1.setLine(p1.getLine() - 2);
-                if(board[p1.getLine()][p1.getColumn()]==BoardState.PLAYER){
-                    p1.setLine(p1.getLine() - 2);
+                board[p.getLine()][p.getColumn()]=BoardState.EMPTY;
+                p.setLine(p.getLine() - 2);
+                if(board[p.getLine()][p.getColumn()]==BoardState.PLAYER){
+                    p.setLine(p.getLine() - 2);
                 }
-                board[p1.getLine()][p1.getColumn()]=BoardState.PLAYER;
+                board[p.getLine()][p.getColumn()]=BoardState.PLAYER;
                 break;
             case 1:
-                board[p1.getLine()][p1.getColumn()]=BoardState.EMPTY;
-                p1.setLine(p1.getLine()+2);
-                if(board[p1.getLine()][p1.getColumn()]==BoardState.PLAYER){
-                    p1.setLine(p1.getLine() + 2);
+                board[p.getLine()][p.getColumn()]=BoardState.EMPTY;
+                p.setLine(p.getLine()+2);
+                if(board[p.getLine()][p.getColumn()]==BoardState.PLAYER){
+                    p.setLine(p.getLine() + 2);
                 }
-                board[p1.getLine()][p1.getColumn()]=BoardState.PLAYER;
+                board[p.getLine()][p.getColumn()]=BoardState.PLAYER;
                 break;
             case 2:
-                board[p1.getLine()][p1.getColumn()]=BoardState.EMPTY;
-                p1.setColumn(p1.getColumn()-2);
-                if(board[p1.getLine()][p1.getColumn()]==BoardState.PLAYER){
-                    p1.setColumn(p1.getColumn()-2);
+                board[p.getLine()][p.getColumn()]=BoardState.EMPTY;
+                p.setColumn(p.getColumn()-2);
+                if(board[p.getLine()][p.getColumn()]==BoardState.PLAYER){
+                    p.setColumn(p.getColumn()-2);
                 }
-                board[p1.getLine()][p1.getColumn()]=BoardState.PLAYER;
+                board[p.getLine()][p.getColumn()]=BoardState.PLAYER;
                 break;
             case 3:
-                board[p1.getLine()][p1.getColumn()]=BoardState.EMPTY;
-                p1.setColumn(p1.getColumn()+2);
-                if(board[p1.getLine()][p1.getColumn()]==BoardState.PLAYER){
-                    p1.setColumn(p1.getColumn()+2);
+                board[p.getLine()][p.getColumn()]=BoardState.EMPTY;
+                p.setColumn(p.getColumn()+2);
+                if(board[p.getLine()][p.getColumn()]==BoardState.PLAYER){
+                    p.setColumn(p.getColumn()+2);
                 }
-                board[p1.getLine()][p1.getColumn()]=BoardState.PLAYER;
+                board[p.getLine()][p.getColumn()]=BoardState.PLAYER;
                 break;
         }
     }

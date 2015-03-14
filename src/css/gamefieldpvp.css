@@ -4,5 +4,17 @@
 }
 
 #border{
-    
+    -fx-background-color:
+    linear-gradient(#E1FF7B 0%, #E1FF7B 19%, #BDEB1F 30%, #BDEB1F 90%);
+}
+
+#frontbutton_hover{
+    -fx-background-radius: 500em;
+    -fx-pref-width: 60;
+    -fx-pref-height: 60;
+
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), -4, -4, 4, 4);
+
+    -fx-background-image: url("../images/frontarrow.png");
+    -fx-background-size: cover;
 }

@@ -89,16 +89,19 @@ public class Quoridor extends Application {
             }
         });
 
+        GridPane grid = new GridPane();
+        grid.setVgap(20);
+        grid.setHgap(20);
+        grid.add(pvp, 1, 1);
+        grid.add(pve, 1, 2);
+        grid.add(rules, 1, 3);
+        grid.add(exit,1,4);
+        grid.setAlignment(Pos.CENTER);
+
         BorderPane root = new BorderPane();
         root.setId("scene");
-        VBox vbox = new VBox();
-        vbox.setSpacing(15);
-        vbox.setPadding(new Insets(30, 30, 30, 30));
-        vbox.getChildren().addAll(pvp, pve, rules, exit);
-        vbox.setAlignment(Pos.CENTER);
         root.setTop(flow);
-        root.setCenter(vbox);
-        //root.getChildren().addAll(title,vbox);
+        root.setCenter(grid);
 
         scene = new Scene(root, 500, 500);
         scene.getStylesheets().add("css/mainmenu.css");
@@ -118,13 +121,16 @@ public class Quoridor extends Application {
         node.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                node.setId("hoverB");
+                node.toFront();
+                node.setScaleX(1.6);
+                node.setScaleY(1.6);
             }
         });
         node.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                node.setId("exitedB");
+                node.setScaleX(1);
+                node.setScaleY(1);
             }
         });
     }
