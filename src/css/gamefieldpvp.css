@@ -3,12 +3,15 @@
     -fx-background-size: cover;
 }
 
-#border{
-    -fx-background-color:
-    linear-gradient(#E1FF7B 0%, #E1FF7B 19%, #BDEB1F 30%, #BDEB1F 90%);
+#grid{
+    -fx-border-color: #B94100;
+    -fx-border-width: 10;
+    -fx-border-style: solid;
+    -fx-background-color: #E39F33;
+   /* linear-gradient(#B94100 0%, #B94100 19%, #E55327 30%, #E55327 90%);*/
 }
 
-#frontbutton_hover{
+.button{
     -fx-background-radius: 500em;
     -fx-pref-width: 60;
     -fx-pref-height: 60;

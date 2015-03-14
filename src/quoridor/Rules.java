@@ -54,8 +54,8 @@ public class Rules {
 
         //creating buttons and adding them to Hbox layout
         Button homebutton = new Button();
-        homebutton.setId("homebutton_exited");
-        changeHome(homebutton);
+        homebutton.setId("home");
+        changeBackgroundOnHoverUsingEvents(homebutton);
         homebutton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -67,8 +67,8 @@ public class Rules {
         });
 
         backbutton = new Button();
-        backbutton.setId("backbutton_exited");
-        changeBack(backbutton);
+        backbutton.setId("back");
+        changeBackgroundOnHoverUsingEvents(backbutton);
         backbutton.setVisible(false);
         backbutton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -84,8 +84,8 @@ public class Rules {
         });
 
         frontbutton = new Button();
-        frontbutton.setId("frontbutton_exited");
-        changeFront(frontbutton);
+        frontbutton.setId("front");
+        changeBackgroundOnHoverUsingEvents(frontbutton);
         frontbutton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -99,9 +99,13 @@ public class Rules {
             }
         });
 
-        HBox rules_buttons = new HBox();
-        rules_buttons.setSpacing(10);
-        rules_buttons.getChildren().addAll(homebutton, backbutton, frontbutton);
+        GridPane rules_buttons = new GridPane();
+        rules_buttons.setHgap(20);
+        rules_buttons.setHgap(20);
+        rules_buttons.add(homebutton, 1, 1);
+        rules_buttons.add(backbutton, 2, 1);
+        rules_buttons.add(frontbutton, 3, 1);
+        rules_buttons.setAlignment(Pos.CENTER);
 
         container.getChildren().addAll(title, rText, rules_buttons);
 
@@ -115,47 +119,20 @@ public class Rules {
         return scene;
     }
 
-    public static void changeBack(final Node node) {
+    public static void changeBackgroundOnHoverUsingEvents(final Node node) {
         node.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                node.setId("backbutton_hover");
+                node.toFront();
+                node.setScaleX(1.6);
+                node.setScaleY(1.6);
             }
         });
         node.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                node.setId("backbutton_exited");
-            }
-        });
-    }
-
-    public static void changeFront(final Node node) {
-        node.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                node.setId("frontbutton_hover");
-            }
-        });
-        node.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                node.setId("frontbutton_exited");
-            }
-        });
-    }
-
-    public static void changeHome(final Node node) {
-        node.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                node.setId("homebutton_hover");
-            }
-        });
-        node.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                node.setId("homebutton_exited");
+                node.setScaleX(1);
+                node.setScaleY(1);
             }
         });
     }

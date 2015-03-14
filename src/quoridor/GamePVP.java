@@ -6,6 +6,7 @@ import Logic.Player;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -71,9 +72,11 @@ public class GamePVP {
         primaryStage.setTitle("Quoridor");
 
         BorderPane root = new BorderPane();
+        root.setId("root");
 
         TilePane grid = new TilePane();
-        Group border = new Group(grid);
+        grid.setId("grid");
+        Group group = new Group(grid);
         grid.setHgap(5);
         grid.setVgap(5);
         grid.setPrefRows(9);
@@ -81,21 +84,9 @@ public class GamePVP {
         for (int i = 0; i < 81; i++) {
             grid.getChildren().add(createElement());
         }
-        border.setId("border");
+        root.setCenter(group);
 
-        //border.set
-
-        /*GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(50, 50, 50, 50));
-        gridPane.setHgap(17); gridPane.setVgap(17);
-
-        gridPane.setGridLinesVisible(true);
-        gridPane.add(up, 3, 2);
-        gridPane.add(new Label(""), 17, 17);
-        //root.setCenter(border);*/
-
-        root.setId("root");
-        scene = new Scene(border, 500, 500);
+        scene = new Scene(root, 500, 500);
         scene.getStylesheets().add("css/gamefieldpvp.css");
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent ke) {
@@ -125,6 +116,14 @@ public class GamePVP {
         }
     }
 
+    private Rectangle createElement() {
+        Rectangle rectangle = new Rectangle(35, 35);
+        rectangle.setStroke(Color.web("#B94100"));
+        rectangle.setFill(Color.web("#B94100"));
+
+        return rectangle;
+    }
+
     public Scene getScene(){
         return scene;
     }
@@ -142,13 +141,5 @@ public class GamePVP {
                 node.setId("backbutton_exited");
             }
         });
-    }
-
-    private Rectangle createElement() {
-        Rectangle rectangle = new Rectangle(20, 20);
-        rectangle.setStroke(Color.ORANGE);
-        rectangle.setFill(Color.STEELBLUE);
-
-        return rectangle;
     }
 }
