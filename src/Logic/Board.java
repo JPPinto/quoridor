@@ -90,7 +90,7 @@ public class Board {
     }
 
     public void initPawn(){
-        board[8][8]=BoardState.PLAYER;
+        board[0][0]=BoardState.PLAYER;//0,8
         board[16][8]=BoardState.PLAYER;
     }
 

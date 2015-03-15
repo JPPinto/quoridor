@@ -3,21 +3,45 @@
     -fx-background-size: cover;
 }
 
-#grid{
-    -fx-border-color: #B94100;
+#iBoard{
+    -fx-border-color: #154352;
     -fx-border-width: 10;
     -fx-border-style: solid;
-    -fx-background-color: #E39F33;
+    -fx-background-color: #B3E8D8;
    /* linear-gradient(#B94100 0%, #B94100 19%, #E55327 30%, #E55327 90%);*/
 }
 
-.button{
-    -fx-background-radius: 500em;
-    -fx-pref-width: 60;
-    -fx-pref-height: 60;
+#right{
+    -fx-pref-width: 35;
+    -fx-pref-height: 35;
+    -fx-background-color: #154352;
+    -fx-background-image: url("../images/rightarrow.png");
+    -fx-background-size: cover;
+}
 
-    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), -4, -4, 4, 4);
+#left{
+     -fx-pref-width: 35;
+     -fx-pref-height: 35;
 
-    -fx-background-image: url("../images/frontarrow.png");
+     -fx-background-color: #154352;
+     -fx-background-image: url("../images/leftarrow.png");
+     -fx-background-size: cover;
+ }
+
+#up{
+    -fx-pref-width: 35;
+    -fx-pref-height: 35;
+
+    -fx-background-color: #154352;
+    -fx-background-image: url("../images/uparrow.png");
+    -fx-background-size: cover;
+}
+
+#down{
+    -fx-pref-width: 35;
+    -fx-pref-height: 35;
+
+    -fx-background-color: #154352;
+    -fx-background-image: url("../images/downarrow.png");
     -fx-background-size: cover;
 }

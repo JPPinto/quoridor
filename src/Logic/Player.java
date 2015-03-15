@@ -8,8 +8,8 @@ public class Player {
     private Pawn pawn;
     private Wall[] wall;
 
-    public Player(int line, int column, int ID){
-        setPawn(new Pawn(line, column, ID));
+    public Player(int line, int column, int ID, String name){
+        setPawn(new Pawn(line, column, ID, name));
         setWall(new Wall[10]);
     }
 

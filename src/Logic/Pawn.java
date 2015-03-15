@@ -1,5 +1,7 @@
 package Logic;
 
+import javafx.scene.image.Image;
+
 /**
  * Created by João on 12/03/2015.
  */
@@ -7,11 +9,13 @@ public class Pawn {
     private int line;
     private int column;
     private int ID;
+    private Image image;
 
-    public Pawn(int line, int column, int ID){
+    public Pawn(int line, int column, int ID, String name){
         this.setLine(line);
         this.setColumn(column);
         this.setID(ID);
+        setImage(new Image(getClass().getResourceAsStream("/images/"+name+".png")));
     }
 
     public int getLine() {
@@ -44,5 +48,13 @@ public class Pawn {
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }
