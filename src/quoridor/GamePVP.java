@@ -1,8 +1,8 @@
 package quoridor;
 
-import logic.Board;
-import logic.Pawn;
-import logic.Player;
+import Logic.Board;
+import Logic.Pawn;
+import Logic.Player;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
