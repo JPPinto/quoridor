@@ -9,10 +9,10 @@
     -fx-background-radius: 10;
     -fx-text-fill: white;
 
-    -fx-font: 16px "AngryBirds";
+    -fx-font: 20px "AngryBirds";
 
-    -fx-pref-width: 115;
-    -fx-pref-height: 40;
+    -fx-pref-width: 130;
+    -fx-pref-height: 55;
 
     -fx-background-color:
         linear-gradient(#FFE5A4 0%, #FFE5A4 19%, #FFBD31 30%, #FFBD31 90%);

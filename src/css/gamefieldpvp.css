@@ -45,3 +45,16 @@
     -fx-background-image: url("../images/downarrow.png");
     -fx-background-size: cover;
 }
+
+#home{
+    -fx-background-radius: 500em;
+    -fx-pref-width: 50;
+    -fx-pref-height: 50;
+
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), -4, -4, 4, 4);
+
+    -fx-background-color:
+    linear-gradient(#E1FF7B 0%, #E1FF7B 19%, #BDEB1F 30%, #BDEB1F 90%);
+    -fx-background-image: url("../images/home.png");
+    -fx-background-size: cover;
+}

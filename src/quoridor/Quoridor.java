@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 public class Quoridor extends Application {
 
-    private Button pvp, pve, exit, rules;
+    private Button pvp, pve,eve, exit, rules;
 
     //Font
     public InputStream is;
@@ -68,6 +68,16 @@ public class Quoridor extends Application {
             }
         });
 
+        //Creating Button eve
+        eve = new Button("CPUvCPU");
+        changeBackgroundOnHoverUsingEvents(eve);
+        eve.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("CPUvCPU");
+            }
+        });
+
         //Creating Button exit
         exit = new Button("Exit");
         changeBackgroundOnHoverUsingEvents(exit);
@@ -94,8 +104,9 @@ public class Quoridor extends Application {
         grid.setHgap(20);
         grid.add(pvp, 1, 1);
         grid.add(pve, 1, 2);
-        grid.add(rules, 1, 3);
-        grid.add(exit,1,4);
+        grid.add(eve, 1, 3);
+        grid.add(rules, 1, 4);
+        grid.add(exit,1,5);
         grid.setAlignment(Pos.CENTER);
 
         BorderPane root = new BorderPane();
@@ -103,7 +114,7 @@ public class Quoridor extends Application {
         root.setTop(flow);
         root.setCenter(grid);
 
-        scene = new Scene(root, 500, 500);
+        scene = new Scene(root, 600, 600);
         scene.getStylesheets().add("css/mainmenu.css");
     }
 

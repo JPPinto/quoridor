@@ -1,8 +1,8 @@
 package quoridor;
 
-import Logic.Board;
-import Logic.Pawn;
-import Logic.Player;
+import logic.Board;
+import logic.Pawn;
+import logic.Player;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -10,11 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -34,7 +30,6 @@ public class GamePVP {
     private Scene scene;
     private Button up, down, left, right;
     private GridPane iBoard;
-    private Node [][] iBackBoard = new Node[9][9];
 
     public GamePVP(final Stage primaryStage){
 
@@ -98,17 +93,30 @@ public class GamePVP {
         iBoard.setVgap(5);
         setIBoard();
         Group group = new Group(iBoard);
-        root.setCenter(group);
 
-        scene = new Scene(root, 500, 500);
+        VBox container =new VBox();
+        container.setAlignment(Pos.CENTER);
+        container.setSpacing(10);
+        container.setPadding(new Insets(20, 20, 20, 20));
+        container.getChildren().addAll(group, drawButtons(primaryStage));
+        root.setCenter(container);
+
+        scene = new Scene(root, 600, 600);
         scene.getStylesheets().add("css/gamefieldpvp.css");
     }
 
     public void setIBoard(){
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++){
-                iBackBoard[i][j] = createElement();
-                iBoard.add(iBackBoard[i][j], i, j);
+        for (int i = 0; i < 17; i++) {
+            for (int j = 0; j < 17; j++){
+                if(i%2!=0 && j%2==0){
+                    iBoard.add(createVerticalWall(), i, j);
+                }else if(j%2!=0 && i%2==0){
+                    iBoard.add(createHorizontalWall(), i, j);
+                }else if(i%2==0 || j%2==0){
+                    iBoard.add(createBlock(), i, j);
+                }else{
+                    iBoard.add(createWallConnection(), i, j);
+                }
             }
         }
         //addPawn(p1);
@@ -123,29 +131,23 @@ public class GamePVP {
         image.setFitWidth(35);
         image.setImage(p.getPawn().getImage());
 
-        int line = (int)((double)p.getPawn().getLine()/2+0.5);
-        int column = (int)((double)p.getPawn().getColumn()/2+0.5);
-
-        iBackBoard[line][column] = image;
-        iBoard.add(iBackBoard[line][column], column, line);
+        iBoard.add(image, p.getPawn().getColumn(), p.getPawn().getLine());
     }
 
     public void addInteractiveButtons(Player p){
         Pawn pawn = p.getPawn();
-        int line = (int)((double)pawn.getLine()/2+0.5);
-        int column = (int)((double)pawn.getColumn()/2+0.5);
 
-        if(line-1>=0) {
-            iBoard.add(up, column, line - 1);
+        if(pawn.getLine()-2>=0) {
+            iBoard.add(up, pawn.getColumn(), pawn.getLine() - 2);
         }
-        if(line+1<9) {
-            iBoard.add(down, column, line + 1);
+        if(pawn.getLine()+2<17) {
+            iBoard.add(down, pawn.getColumn(), pawn.getLine() + 2);
         }
-        if(column-1>=0) {
-            iBoard.add(left, column - 1, line);
+        if(pawn.getColumn()-2>=0) {
+            iBoard.add(left, pawn.getColumn() - 2, pawn.getLine());
         }
-        if(column+1<9) {
-            iBoard.add(right, column + 1, line);
+        if(pawn.getColumn()+2<17) {
+            iBoard.add(right, pawn.getColumn() + 2, pawn.getLine());
         }
     }
 
@@ -153,13 +155,36 @@ public class GamePVP {
         clearIBoard();
         board.setBoard(p.getPawn(), direction);
         setIBoard();
-        //setIBoard(p);
         board.printMatrix();
         verifyWinning(p.getPawn());
     }
 
-    private Rectangle createElement() {
+    private Rectangle createBlock() {
         Rectangle rectangle = new Rectangle(35, 35);
+        rectangle.setStroke(Color.web("#59D1A8"));
+        rectangle.setFill(Color.web("#59D1A8"));
+
+        return rectangle;
+    }
+
+    private Rectangle createHorizontalWall() {
+        Rectangle rectangle = new Rectangle(35, 5);
+        rectangle.setStroke(Color.web("#59D1A8"));
+        rectangle.setFill(Color.web("#59D1A8"));
+
+        return rectangle;
+    }
+
+    private Rectangle createVerticalWall() {
+        Rectangle rectangle = new Rectangle(5, 35);
+        rectangle.setStroke(Color.web("#59D1A8"));
+        rectangle.setFill(Color.web("#59D1A8"));
+
+        return rectangle;
+    }
+
+    private Rectangle createWallConnection() {
+        Rectangle rectangle = new Rectangle(5, 5);
         rectangle.setStroke(Color.web("#59D1A8"));
         rectangle.setFill(Color.web("#59D1A8"));
 
@@ -195,5 +220,45 @@ public class GamePVP {
                 node.setStyle("-fx-opacity:1");
             }
         });
+    }
+
+    public static void changeBackgroundOnHoverUsingEvents(final Node node) {
+        node.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                node.toFront();
+                node.setScaleX(1.6);
+                node.setScaleY(1.6);
+            }
+        });
+        node.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                node.setScaleX(1);
+                node.setScaleY(1);
+            }
+        });
+    }
+
+    public GridPane drawButtons(final Stage primaryStage){
+        Button homebutton = new Button();
+        homebutton.setId("home");
+        changeBackgroundOnHoverUsingEvents(homebutton);
+        homebutton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Quoridor main_menu=new Quoridor();
+                main_menu.QuoridorInit(primaryStage);
+                primaryStage.setScene(main_menu.getScene());
+            }
+        });
+
+        GridPane gamepvp_buttons = new GridPane();
+        gamepvp_buttons.setHgap(20);
+        gamepvp_buttons.setHgap(20);
+        gamepvp_buttons.add(homebutton, 1, 1);
+        gamepvp_buttons.setAlignment(Pos.CENTER);
+
+        return gamepvp_buttons;
     }
 }

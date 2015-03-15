@@ -46,7 +46,7 @@ public class Rules {
         FlowPane rText = new FlowPane();
         rText.setId("flowpane");
         dtext=new Text(rules.get(rules_count));
-        dtext.setWrappingWidth(400);
+        dtext.setWrappingWidth(500);
         dtext.setStyle("");
         dtext.setId("text");
         rText.getChildren().add(dtext);
@@ -111,7 +111,7 @@ public class Rules {
 
         root.setCenter(container);
         root.setId("root");
-        scene = new Scene(root, 500, 500);
+        scene = new Scene(root, 600, 600);
         scene.getStylesheets().add("css/rulesmenu.css");
     }
 
