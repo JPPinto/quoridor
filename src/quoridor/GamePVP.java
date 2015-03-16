@@ -28,8 +28,10 @@ public class GamePVP {
     private Player p2;
 
     private Scene scene;
-    private Button up, down, left, right;
+    private Button up, down, left, right, hWall, vWall;
     private GridPane iBoard;
+
+    private boolean horizontal_wall=true;
 
     public GamePVP(final Stage primaryStage){
 
@@ -87,6 +89,7 @@ public class GamePVP {
         BorderPane root = new BorderPane();
         root.setId("root");
 
+        //create game board
         iBoard = new GridPane();
         iBoard.setId("iBoard");
         iBoard.setHgap(5);
@@ -94,6 +97,7 @@ public class GamePVP {
         setIBoard();
         Group group = new Group(iBoard);
 
+        //reoraginize nodes position (vertical alignment)
         VBox container =new VBox();
         container.setAlignment(Pos.CENTER);
         container.setSpacing(10);
@@ -108,14 +112,24 @@ public class GamePVP {
     public void setIBoard(){
         for (int i = 0; i < 17; i++) {
             for (int j = 0; j < 17; j++){
-                if(i%2!=0 && j%2==0){
-                    iBoard.add(createVerticalWall(), i, j);
-                }else if(j%2!=0 && i%2==0){
-                    iBoard.add(createHorizontalWall(), i, j);
-                }else if(i%2==0 || j%2==0){
-                    iBoard.add(createBlock(), i, j);
-                }else{
-                    iBoard.add(createWallConnection(), i, j);
+                if(board.getBoard()[i][j]==Board.BoardState.BLOCK || board.getBoard()[i][j]==Board.BoardState.PLAYER){
+                    iBoard.add(createBlock(), j, i);
+                }else if(board.getBoard()[i][j]==Board.BoardState.WALL_BLOCK){
+                    if(i%2!=0 && j%2==0){
+                        iBoard.add(createHorizontalWall("#59D1A8"), j, i);
+                    }else if(i%2==0 && j%2!=0){
+                        iBoard.add(createVerticalWall("#59D1A8"), j, i);
+                    }else {
+                        iBoard.add(createWallConnection("#59D1A8"), j, i);
+                    }
+                }else if(board.getBoard()[i][j]==Board.BoardState.WALL){
+                    if(i%2!=0 && j%2==0){
+                        iBoard.add(createHorizontalWall("#E88E3A"), j, i);
+                    }else if(i%2==0 && j%2!=0){
+                        iBoard.add(createVerticalWall("#E88E3A"), j, i);
+                    }else {
+                        iBoard.add(createWallConnection("#E88E3A"), j, i);
+                    }
                 }
             }
         }
@@ -125,7 +139,7 @@ public class GamePVP {
         addInteractiveButtons(p2);
     }
 
-    public void addPawn(Player p){//add Image
+    public void addPawn(Player p){
         ImageView image = new ImageView();
         image.setFitHeight(35);
         image.setFitWidth(35);
@@ -137,16 +151,16 @@ public class GamePVP {
     public void addInteractiveButtons(Player p){
         Pawn pawn = p.getPawn();
 
-        if(pawn.getLine()-2>=0) {
+        if(pawn.getLine()-2>=0 && board.getBoard()[pawn.getLine()-1][pawn.getColumn()]!= Board.BoardState.WALL) {
             iBoard.add(up, pawn.getColumn(), pawn.getLine() - 2);
         }
-        if(pawn.getLine()+2<17) {
+        if(pawn.getLine()+2<17 && board.getBoard()[pawn.getLine()+1][pawn.getColumn()]!= Board.BoardState.WALL) {
             iBoard.add(down, pawn.getColumn(), pawn.getLine() + 2);
         }
-        if(pawn.getColumn()-2>=0) {
+        if(pawn.getColumn()-2>=0 && board.getBoard()[pawn.getLine()][pawn.getColumn()-1]!= Board.BoardState.WALL) {
             iBoard.add(left, pawn.getColumn() - 2, pawn.getLine());
         }
-        if(pawn.getColumn()+2<17) {
+        if(pawn.getColumn()+2<17 && board.getBoard()[pawn.getLine()][pawn.getColumn()+1]!= Board.BoardState.WALL) {
             iBoard.add(right, pawn.getColumn() + 2, pawn.getLine());
         }
     }
@@ -167,26 +181,27 @@ public class GamePVP {
         return rectangle;
     }
 
-    private Rectangle createHorizontalWall() {
+    private Rectangle createHorizontalWall(String color) {
         Rectangle rectangle = new Rectangle(35, 5);
-        rectangle.setStroke(Color.web("#59D1A8"));
-        rectangle.setFill(Color.web("#59D1A8"));
+        rectangle.setStroke(Color.web(color));
+        rectangle.setFill(Color.web(color));
 
         return rectangle;
     }
 
-    private Rectangle createVerticalWall() {
+    private Rectangle createVerticalWall(String color) {
         Rectangle rectangle = new Rectangle(5, 35);
-        rectangle.setStroke(Color.web("#59D1A8"));
-        rectangle.setFill(Color.web("#59D1A8"));
+        rectangle.setStroke(Color.web(color));
+        rectangle.setFill(Color.web(color));
 
         return rectangle;
     }
 
-    private Rectangle createWallConnection() {
+    private Rectangle createWallConnection(String color) {
         Rectangle rectangle = new Rectangle(5, 5);
-        rectangle.setStroke(Color.web("#59D1A8"));
-        rectangle.setFill(Color.web("#59D1A8"));
+        changeWallOnHoverUsingEvents(rectangle);
+        rectangle.setStroke(Color.web(color));
+        rectangle.setFill(Color.web(color));
 
         return rectangle;
     }
@@ -240,6 +255,23 @@ public class GamePVP {
         });
     }
 
+    public void changeWallOnHoverUsingEvents(final Node node) {
+        node.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(horizontal_wall){
+                    board.createWall(p2.getWall()[0], GridPane.getRowIndex(node), GridPane.getColumnIndex(node)-1);
+                    board.createWall(p2.getWall()[0], GridPane.getRowIndex(node), GridPane.getColumnIndex(node)+1);
+                }else{
+                    board.createWall(p2.getWall()[0], GridPane.getRowIndex(node)-1, GridPane.getColumnIndex(node));
+                    board.createWall(p2.getWall()[0], GridPane.getRowIndex(node)+1, GridPane.getColumnIndex(node));
+                }
+                board.createWall(p2.getWall()[0], GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
+                makeMove(p2, 4);
+            }
+        });
+    }
+
     public GridPane drawButtons(final Stage primaryStage){
         Button homebutton = new Button();
         homebutton.setId("home");
@@ -253,10 +285,37 @@ public class GamePVP {
             }
         });
 
+        hWall = new Button();
+        hWall.setId("hWall");
+        hWall.setOpacity(0.5);
+        changeBackgroundOnHoverUsingEvents(hWall);
+        hWall.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                horizontal_wall=true;
+                hWall.setOpacity(0.5);
+                vWall.setOpacity(1);
+            }
+        });
+
+        vWall = new Button();
+        vWall.setId("vWall");
+        changeBackgroundOnHoverUsingEvents(vWall);
+        vWall.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                horizontal_wall=false;
+                hWall.setOpacity(1);
+                vWall.setOpacity(0.5);
+            }
+        });
+
         GridPane gamepvp_buttons = new GridPane();
         gamepvp_buttons.setHgap(20);
         gamepvp_buttons.setHgap(20);
         gamepvp_buttons.add(homebutton, 1, 1);
+        gamepvp_buttons.add(hWall, 2, 1);
+        gamepvp_buttons.add(vWall, 3, 1);
         gamepvp_buttons.setAlignment(Pos.CENTER);
 
         return gamepvp_buttons;

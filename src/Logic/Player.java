@@ -10,7 +10,10 @@ public class Player {
 
     public Player(int line, int column, int ID, String name){
         setPawn(new Pawn(line, column, ID, name));
-        setWall(new Wall[10]);
+        wall = new Wall[10];
+        for (int i = 0; i < wall.length; i++){
+            wall[i]=new Wall(Wall.WDirection.HORIZONTAL,18,18);
+        }
     }
 
     public Pawn getPawn() {
