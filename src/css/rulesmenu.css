@@ -1,0 +1,68 @@
+#root{
+    -fx-background-image: url("../images/clouds.gif") no-repeat center center fixed;
+    -fx-background-size: cover;
+}
+
+#text{
+    -fx-font: 20px "AngryBirds";
+    -fx-fill: white; -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), 2, 2 , 2, 2);
+}
+
+#flowpane{
+    -fx-display: inline-block;
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), -4, -4, 4, 4);
+
+    -fx-background-radius: 10;
+    -fx-padding: 15 30 15 30;
+
+    -fx-pref-width: 300px;
+    -fx-pref-height: 400px;
+
+    -fx-background-color:
+    linear-gradient(#FFE5A4 0%, #FFE5A4 19%, #FFBD31 30%, #FFBD31 90%);
+}
+
+#title{
+    -fx-font: 70px "AngryBirds";
+    -fx-fill: white;
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), 2, 2 , 2, 2);
+}
+
+#home{
+    -fx-background-radius: 500em;
+    -fx-pref-width: 50;
+    -fx-pref-height: 50;
+
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), -4, -4, 4, 4);
+
+    -fx-background-color:
+    linear-gradient(#E1FF7B 0%, #E1FF7B 19%, #BDEB1F 30%, #BDEB1F 90%);
+    -fx-background-image: url("../images/home.png");
+    -fx-background-size: cover;
+}
+
+#back{
+    -fx-background-radius: 500em;
+    -fx-pref-width: 50;
+    -fx-pref-height: 50;
+
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), -4, -4, 4, 4);
+
+    -fx-background-color:
+    linear-gradient(#E1FF7B 0%, #E1FF7B 19%, #BDEB1F 30%, #BDEB1F 90%);
+    -fx-background-image: url("../images/leftarrow.png");
+    -fx-background-size: cover;
+}
+
+#front{
+    -fx-background-radius: 500em;
+    -fx-pref-width: 50;
+    -fx-pref-height: 50;
+
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), -4, -4, 4, 4);
+
+    -fx-background-color:
+    linear-gradient(#E1FF7B 0%, #E1FF7B 19%, #BDEB1F 30%, #BDEB1F 90%);
+    -fx-background-image: url("../images/rightarrow.png");
+    -fx-background-size: cover;
+}
