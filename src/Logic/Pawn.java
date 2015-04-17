@@ -39,7 +39,7 @@ public class Pawn {
     }
 
     public boolean equals(Pawn p){
-        return this.line==p.line && this.column==p.column;
+        return this.line==p.line && this.column==p.column && this.ID==p.ID;
     }
 
     public int getID() {

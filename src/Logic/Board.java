@@ -65,10 +65,25 @@ public class Board {
         }
     }
 
-    public void createWall(Wall wall, int line, int column){
-        wall.setLine(line);
-        wall.setColumn(column);
-        board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
+    public void createWall(Wall wall, Boolean horizontal_wall, int line, int column){
+
+        if(horizontal_wall){
+            wall.setLine(line);
+            wall.setColumn(column);
+            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
+            wall.setColumn(column-1);
+            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
+            wall.setColumn(column+1);
+            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
+        }else{
+            wall.setColumn(column);
+            wall.setLine(line);
+            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
+            wall.setLine(line-1);
+            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
+            wall.setLine(line+1);
+            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
+        }
     }
 
     public void printMatrix(){
@@ -102,7 +117,7 @@ public class Board {
     }
 
     public void initPawn(){
-        board[0][0]=BoardState.PLAYER;//0,8
+        board[0][8]=BoardState.PLAYER;//0,8
         board[16][8]=BoardState.PLAYER;
     }
 

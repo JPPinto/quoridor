@@ -32,6 +32,7 @@ public class GamePVP {
     private GridPane iBoard;
 
     private boolean horizontal_wall=true;
+    private int playerPlaying=1;
 
     public GamePVP(final Stage primaryStage){
 
@@ -39,7 +40,7 @@ public class GamePVP {
 
         //init board and players
         board = new Board();
-        p1 = new Player(0, 0, 1, "pawn1");
+        p1 = new Player(0, 8, 1, "pawn1");
         p2 = new Player(16, 8, 2, "pawn2");
 
         //create interactive button up
@@ -49,7 +50,15 @@ public class GamePVP {
         up.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                makeMove(p2, 0);
+                if(playerPlaying==1){
+                    makeMove(p1, 0);
+                    addInteractiveButtons(p2);
+                    playerPlaying=2;
+                }else{
+                    makeMove(p2, 0);
+                    addInteractiveButtons(p1);
+                    playerPlaying=1;
+                }
             }
         });
 
@@ -60,7 +69,15 @@ public class GamePVP {
         down.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                makeMove(p2, 1);
+                if(playerPlaying==1){
+                    makeMove(p1, 1);
+                    addInteractiveButtons(p2);
+                    playerPlaying=2;
+                }else{
+                    makeMove(p2, 1);
+                    addInteractiveButtons(p1);
+                    playerPlaying=1;
+                }
             }
         });
 
@@ -71,7 +88,15 @@ public class GamePVP {
         left.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            if(playerPlaying==1){
+                makeMove(p1, 2);
+                addInteractiveButtons(p2);
+                playerPlaying=2;
+            }else{
                 makeMove(p2, 2);
+                addInteractiveButtons(p1);
+                playerPlaying=1;
+            }
             }
         });
 
@@ -82,7 +107,15 @@ public class GamePVP {
         right.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            if(playerPlaying==1){
+                makeMove(p1, 3);
+                addInteractiveButtons(p2);
+                playerPlaying=2;
+            }else{
                 makeMove(p2, 3);
+                addInteractiveButtons(p1);
+                playerPlaying=1;
+            }
             }
         });
 
@@ -95,6 +128,7 @@ public class GamePVP {
         iBoard.setHgap(5);
         iBoard.setVgap(5);
         setIBoard();
+        addInteractiveButtons(p1);//add first player
         Group group = new Group(iBoard);
 
         //reoraginize nodes position (vertical alignment)
@@ -133,10 +167,8 @@ public class GamePVP {
                 }
             }
         }
-        //addPawn(p1);
-        //addInteractiveButtons(p1);
+        addPawn(p1);
         addPawn(p2);
-        addInteractiveButtons(p2);
     }
 
     public void addPawn(Player p){
@@ -152,16 +184,28 @@ public class GamePVP {
         Pawn pawn = p.getPawn();
 
         if(pawn.getLine()-2>=0 && board.getBoard()[pawn.getLine()-1][pawn.getColumn()]!= Board.BoardState.WALL) {
-            iBoard.add(up, pawn.getColumn(), pawn.getLine() - 2);
+            if(board.getBoard()[pawn.getLine()-2][pawn.getColumn()]!= Board.BoardState.PLAYER)
+                iBoard.add(up, pawn.getColumn(), pawn.getLine() - 2);
+            else if(pawn.getLine()-4>=0)
+                iBoard.add(up, pawn.getColumn(), pawn.getLine() - 4);
         }
         if(pawn.getLine()+2<17 && board.getBoard()[pawn.getLine()+1][pawn.getColumn()]!= Board.BoardState.WALL) {
-            iBoard.add(down, pawn.getColumn(), pawn.getLine() + 2);
+            if(board.getBoard()[pawn.getLine()+2][pawn.getColumn()]!= Board.BoardState.PLAYER)
+                iBoard.add(down, pawn.getColumn(), pawn.getLine() + 2);
+            else if(pawn.getLine()+4<17)
+                iBoard.add(down, pawn.getColumn(), pawn.getLine() + 4);
         }
         if(pawn.getColumn()-2>=0 && board.getBoard()[pawn.getLine()][pawn.getColumn()-1]!= Board.BoardState.WALL) {
-            iBoard.add(left, pawn.getColumn() - 2, pawn.getLine());
+            if(board.getBoard()[pawn.getLine()][pawn.getColumn()-2]!= Board.BoardState.PLAYER)
+                iBoard.add(left, pawn.getColumn() - 2, pawn.getLine());
+            else if(pawn.getColumn()-4>=0)
+                iBoard.add(left, pawn.getColumn() - 4, pawn.getLine());
         }
         if(pawn.getColumn()+2<17 && board.getBoard()[pawn.getLine()][pawn.getColumn()+1]!= Board.BoardState.WALL) {
-            iBoard.add(right, pawn.getColumn() + 2, pawn.getLine());
+            if(board.getBoard()[pawn.getLine()][pawn.getColumn()+2]!= Board.BoardState.PLAYER)
+                iBoard.add(right, pawn.getColumn() + 2, pawn.getLine());
+            else if(pawn.getColumn()+4<17)
+                iBoard.add(right, pawn.getColumn() + 4, pawn.getLine());
         }
     }
 
@@ -170,6 +214,7 @@ public class GamePVP {
         board.setBoard(p.getPawn(), direction);
         setIBoard();
         board.printMatrix();
+
         verifyWinning(p.getPawn());
     }
 
@@ -259,15 +304,18 @@ public class GamePVP {
         node.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if(horizontal_wall){
-                    board.createWall(p2.getWall()[0], GridPane.getRowIndex(node), GridPane.getColumnIndex(node)-1);
-                    board.createWall(p2.getWall()[0], GridPane.getRowIndex(node), GridPane.getColumnIndex(node)+1);
+
+                if(playerPlaying==1){
+                    board.createWall(p1.getWall()[0], horizontal_wall,GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
+                    makeMove(p1, 4);
+                    addInteractiveButtons(p2);
+                    playerPlaying=2;
                 }else{
-                    board.createWall(p2.getWall()[0], GridPane.getRowIndex(node)-1, GridPane.getColumnIndex(node));
-                    board.createWall(p2.getWall()[0], GridPane.getRowIndex(node)+1, GridPane.getColumnIndex(node));
+                    board.createWall(p2.getWall()[0], horizontal_wall,GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
+                    makeMove(p2, 4);
+                    addInteractiveButtons(p1);
+                    playerPlaying=1;
                 }
-                board.createWall(p2.getWall()[0], GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
-                makeMove(p2, 4);
             }
         });
     }
