@@ -19,6 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import javax.swing.*;
+
 /**
  * Created by João on 02/03/2015.
  */
@@ -27,6 +29,7 @@ public class GamePVP {
     private Game game;
 
     private Scene scene;
+    private Stage stage;
     private Button up, down, left, right, hWall, vWall;
     private GridPane iBoard;
 
@@ -36,7 +39,7 @@ public class GamePVP {
     public GamePVP(final Stage primaryStage){
 
         primaryStage.setTitle("Quoridor");
-
+        stage=primaryStage;
         game = new Game();
 
         //create interactive button up
@@ -283,14 +286,18 @@ public class GamePVP {
             @Override
             public void handle(MouseEvent mouseEvent) {
 
-                if (playerPlaying == 1) {
-                    game.getBoard().createWall(game.getP1().getWall()[0], horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
-                    makeMove(game.getP1(), game.getP2(), 4);
-                    playerPlaying = 2;
-                } else {
-                    game.getBoard().createWall(game.getP2().getWall()[0], horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
-                    makeMove(game.getP2(), game.getP1(), 4);
-                    playerPlaying = 1;
+                try {
+                    if (playerPlaying == 1) {
+                        game.createWall(game.getP1(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
+                        makeMove(game.getP1(), game.getP2(), 4);
+                        playerPlaying = 2;
+                    } else {
+                        game.createWall(game.getP2(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
+                        makeMove(game.getP2(), game.getP1(), 4);
+                        playerPlaying = 1;
+                    }
+                }catch(ArrayIndexOutOfBoundsException ex){
+                        JOptionPane.showMessageDialog(null, "You reach the maximun walls");
                 }
             }
         });

@@ -12,9 +12,9 @@ public class Game {
     public Game(){
 
         //init board and players
-        setBoard(new Board());
-        setP1(new Player(0, 8, 1, "pawn1"));
-        setP2(new Player(16, 8, 2, "pawn2"));
+        board = new Board();
+        p1 = new Player(0, 8, 1, "pawn1");
+        p2 = new Player(16, 8, 2, "pawn2");
 
     }
 
@@ -31,6 +31,13 @@ public class Game {
         }else if(p.getLine()==0 && p.getID()==2){
             System.out.println("Player 2 - You win");
         }
+    }
+
+    public void createWall(Player p, Boolean horizontal_wall, int line, int column){
+        p.addWallByIndex(p.getWallCount(), new Wall(horizontal_wall ? Wall.WDirection.HORIZONTAL : Wall.WDirection.VERTICAL, line, column));
+        Wall wall = p.getWallById(p.getWallCount());
+        board.createWall(wall, horizontal_wall, line, column);
+        p.incWallCount();
     }
 
     public Board getBoard() {
