@@ -63,14 +63,12 @@ public class Game {
                 return minCost;
             }
         }
-        System.out.println("value[1]");
         fillEmptyWall(horizontal_wall, line, column, Board.BoardState.WALL);
 
         //Create Graph
         Vertex[][] vertex = new Vertex[17][17];
         createGraph(vertex);
 
-        System.out.println("value[2]");
         Dijkstra dijkstra= new Dijkstra();
         dijkstra.computePaths(vertex[p.getPawn().getLine()][p.getPawn().getColumn()]);
         for(int i=0; i<vertex[p.getTargetLine()].length; i++){
@@ -79,15 +77,12 @@ public class Game {
             //List<Vertex> path = dijkstra.getShortestPathTo(vertex[p.getTargetLine()][i]);
             //System.out.println("Path: " + path);
 
-            System.out.println("value[3]");
             if(minCost>totalCost){
-                System.out.println("value[4]");
                 minCost=totalCost;
             }
         }
 
         fillEmptyWall(horizontal_wall, line, column, Board.BoardState.WALL_BLOCK);
-        System.out.println("value[5] = "+minCost);
         return minCost;
     }
 
