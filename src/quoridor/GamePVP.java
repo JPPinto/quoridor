@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Scene;
@@ -127,7 +128,10 @@ public class GamePVP {
         container.setAlignment(Pos.CENTER);
         container.setSpacing(10);
         container.setPadding(new Insets(20, 20, 20, 20));
-        container.getChildren().addAll(group, drawButtons(primaryStage));
+            HBox container2 =new HBox();
+            container2.setAlignment(Pos.CENTER);
+            container2.getChildren().addAll(group, drawButtons(primaryStage), new Label("10"), new Label("10"));
+        container.getChildren().addAll(group, container2);
         root.setCenter(container);
 
         scene = new Scene(root, 600, 600);
