@@ -4,7 +4,6 @@ import minimax.Dijkstra;
 import minimax.Edge;
 import minimax.Vertex;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by João on 17/04/2015.
@@ -40,7 +39,7 @@ public class Game {
     }
 
     public boolean createWall(Player p1,Player p2, Boolean horizontal_wall, int line, int column){
-        if(board.getBoard()[line][column]!= Board.BoardState.WALL && verifyWallPosition(p1, horizontal_wall, line, column)<1000 && verifyWallPosition(p2, horizontal_wall, line, column)<1000){
+        if(board.getBoard()[line][column]!= Board.BoardState.WALL && verifyWallPosition(p1, horizontal_wall, line, column)<15000 && verifyWallPosition(p2, horizontal_wall, line, column)<15000){
             p1.addWallByIndex(p1.getWallCount(), new Wall(horizontal_wall ? Wall.WDirection.HORIZONTAL : Wall.WDirection.VERTICAL, line, column));
             Wall wall = p1.getWallById(p1.getWallCount());
 
@@ -97,7 +96,7 @@ public class Game {
         int cost = 1;
         for (int i = 0; i < board.getBoard().length; i++) {
             for (int j = 0; j < board.getBoard()[i].length; j++) {
-                if(board.getBoard()[i][j]== Board.BoardState.WALL){
+                if(board.getBoard()[i][j]== Board.BoardState.WALL || board.getBoard()[i][j]== Board.BoardState.PLAYER){
                     cost=10000;
                 }
                 ArrayList<Edge> edges = new ArrayList<Edge>();
