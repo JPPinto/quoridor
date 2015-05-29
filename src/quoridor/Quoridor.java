@@ -64,7 +64,8 @@ public class Quoridor extends Application {
         pve.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("1PvCPU");
+                GamePVE gamepve=new GamePVE(primaryStage);
+                primaryStage.setScene(gamepve.getScene());
             }
         });
 

@@ -22,9 +22,9 @@ import javafx.stage.Stage;
 import javax.swing.*;
 
 /**
- * Created by Jo√£o on 02/03/2015.
+ * Created by Jo„o on 02/03/2015.
  */
-public class GamePVP {
+public class GamePVE {
 
     private Game game;
 
@@ -36,7 +36,7 @@ public class GamePVP {
     private boolean horizontal_wall=true;
     private int playerPlaying=1;
 
-    public GamePVP(final Stage primaryStage){
+    public GamePVE(final Stage primaryStage){
 
         primaryStage.setTitle("Quoridor");
         stage=primaryStage;
@@ -83,13 +83,13 @@ public class GamePVP {
         left.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            if(playerPlaying==1){
-                makeMove(game.getP1(), game.getP2(), 2);
-                playerPlaying=2;
-            }else{
-                makeMove(game.getP2(), game.getP1(), 2);
-                playerPlaying=1;
-            }
+                if(playerPlaying==1){
+                    makeMove(game.getP1(), game.getP2(), 2);
+                    playerPlaying=2;
+                }else{
+                    makeMove(game.getP2(), game.getP1(), 2);
+                    playerPlaying=1;
+                }
             }
         });
 
@@ -100,13 +100,13 @@ public class GamePVP {
         right.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            if(playerPlaying==1){
-                makeMove(game.getP1(), game.getP2(), 3);
-                playerPlaying=2;
-            }else{
-                makeMove(game.getP2(), game.getP1(), 3);
-                playerPlaying=1;
-            }
+                if(playerPlaying==1){
+                    makeMove(game.getP1(), game.getP2(), 3);
+                    playerPlaying=2;
+                }else{
+                    makeMove(game.getP2(), game.getP1(), 3);
+                    playerPlaying=1;
+                }
             }
         });
 
@@ -297,7 +297,7 @@ public class GamePVP {
                         playerPlaying = 1;
                     }
                 }catch(ArrayIndexOutOfBoundsException ex){
-                        JOptionPane.showMessageDialog(null, "You reach the maximun walls");
+                    JOptionPane.showMessageDialog(null, "You reach the maximun walls");
                 }
             }
         });

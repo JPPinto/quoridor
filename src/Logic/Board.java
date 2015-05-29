@@ -68,22 +68,36 @@ public class Board {
     public void createWall(Wall wall, Boolean horizontal_wall, int line, int column){
 
         if(horizontal_wall){
-            wall.setLine(line);
-            wall.setColumn(column);
-            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
-            wall.setColumn(column-1);
-            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
-            wall.setColumn(column+1);
-            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
-        }else{
-            wall.setColumn(column);
-            wall.setLine(line);
-            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
-            wall.setLine(line-1);
-            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
-            wall.setLine(line+1);
-            board[wall.getLine()][wall.getColumn()]=BoardState.WALL;
+            if(board[line][column+1]==BoardState.WALL || board[line][column-1]==BoardState.WALL){
+                return;
+            }
+            board[line][column]=BoardState.WALL;
+            board[line][column-1]=BoardState.WALL;
+            board[line][column+1]=BoardState.WALL;
+
+            if(column-3>=0 && board[line][column-3]==BoardState.WALL){
+                board[line][column-2]=BoardState.WALL;
+            }
+            if(column+3<17 && board[line][column+3]==BoardState.WALL){
+                board[line][column+2]=BoardState.WALL;
+            }
+        } else{
+            if(board[line+1][column]==BoardState.WALL || board[line-1][column]==BoardState.WALL){
+                return;
+            }
+            board[line][column]=BoardState.WALL;
+            board[line-1][column]=BoardState.WALL;
+            board[line+1][column]=BoardState.WALL;
+
+            if(line-3>=0 && board[line-3][column]==BoardState.WALL){
+                board[line-2][column]=BoardState.WALL;
+            }
+            if(line+3<17 && board[line+3][column]==BoardState.WALL){
+                board[line+2][column]=BoardState.WALL;
+            }
         }
+        wall.setLine(line);
+        wall.setColumn(column);
     }
 
     public void printMatrix(){
