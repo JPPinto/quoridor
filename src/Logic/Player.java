@@ -8,10 +8,12 @@ public class Player {
     private Pawn pawn;
     private Wall[] wall;
     private int wallCount=0;
+    private int target_line;
 
-    public Player(int line, int column, int ID, String name){
+    public Player(int line, int column, int ID, String name, int target_line){
         setPawn(new Pawn(line, column, ID, name));
         wall = new Wall[10];
+        this.target_line=target_line;
     }
 
     public Pawn getPawn() {
@@ -44,5 +46,9 @@ public class Player {
 
     public void incWallCount(){
         wallCount++;
+    }
+
+    public int getTargetLine(){
+        return target_line;
     }
 }
