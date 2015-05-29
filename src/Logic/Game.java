@@ -39,15 +39,16 @@ public class Game {
         }
     }
 
-    public void createWall(Player p1,Player p2, Boolean horizontal_wall, int line, int column){
+    public boolean createWall(Player p1,Player p2, Boolean horizontal_wall, int line, int column){
         if(board.getBoard()[line][column]!= Board.BoardState.WALL && verifyWallPosition(p1, horizontal_wall, line, column) && verifyWallPosition(p2, horizontal_wall, line, column)){
             p1.addWallByIndex(p1.getWallCount(), new Wall(horizontal_wall ? Wall.WDirection.HORIZONTAL : Wall.WDirection.VERTICAL, line, column));
             Wall wall = p1.getWallById(p1.getWallCount());
 
             board.createWall(wall, horizontal_wall, line, column);
             p1.incWallCount();
+            return true;
         }else{
-            System.out.println("You cant place wall here. Play again.");
+            return false;
         }
     }
 

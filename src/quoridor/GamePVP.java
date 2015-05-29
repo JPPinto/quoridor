@@ -288,13 +288,19 @@ public class GamePVP {
 
                 try {
                     if (playerPlaying == 1) {
-                        game.createWall(game.getP1(), game.getP2(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
-                        makeMove(game.getP1(), game.getP2(), 4);
-                        playerPlaying = 2;
+                        if(!game.createWall(game.getP1(), game.getP2(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
+                            System.out.println("You cant place wall there! Play again");
+                        }else{
+                            makeMove(game.getP1(), game.getP2(), 4);
+                            playerPlaying = 2;
+                        }
                     } else {
-                        game.createWall(game.getP2(), game.getP1(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
-                        makeMove(game.getP2(), game.getP1(), 4);
-                        playerPlaying = 1;
+                        if(!game.createWall(game.getP2(), game.getP1(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
+                            System.out.println("You cant place wall there! Play again");
+                        }else{
+                            makeMove(game.getP2(), game.getP1(), 4);
+                            playerPlaying = 1;
+                        }
                     }
                 }catch(ArrayIndexOutOfBoundsException ex){
                         JOptionPane.showMessageDialog(null, "You reach the maximun walls");

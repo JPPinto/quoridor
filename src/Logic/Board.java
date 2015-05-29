@@ -68,9 +68,6 @@ public class Board {
     public void createWall(Wall wall, Boolean horizontal_wall, int line, int column){
 
         if(horizontal_wall){
-            if(board[line][column+1]==BoardState.WALL || board[line][column-1]==BoardState.WALL){
-                return;
-            }
             board[line][column]=BoardState.WALL;
             board[line][column-1]=BoardState.WALL;
             board[line][column+1]=BoardState.WALL;
@@ -82,9 +79,6 @@ public class Board {
                 board[line][column+2]=BoardState.WALL;
             }
         } else{
-            if(board[line+1][column]==BoardState.WALL || board[line-1][column]==BoardState.WALL){
-                return;
-            }
             board[line][column]=BoardState.WALL;
             board[line-1][column]=BoardState.WALL;
             board[line+1][column]=BoardState.WALL;
