@@ -33,6 +33,7 @@ public class GamePVP {
     private Stage stage;
     private Button up, down, left, right, hWall, vWall;
     private GridPane iBoard;
+    private Label label;
 
     private boolean horizontal_wall=true;
     private int playerPlaying=1;
@@ -51,11 +52,11 @@ public class GamePVP {
             @Override
             public void handle(ActionEvent event) {
                 if(playerPlaying==1){
-                    makeMove(game.getP1(), game.getP2(), 0);
                     playerPlaying=2;
+                    makeMove(game.getP1(), game.getP2(), 0);
                 }else{
-                    makeMove(game.getP2(), game.getP1(), 0);
                     playerPlaying=1;
+                    makeMove(game.getP2(), game.getP1(), 0);
                 }
             }
         });
@@ -68,11 +69,11 @@ public class GamePVP {
             @Override
             public void handle(ActionEvent event) {
                 if(playerPlaying==1){
-                    makeMove(game.getP1(), game.getP2(), 1);
                     playerPlaying=2;
+                    makeMove(game.getP1(), game.getP2(), 1);
                 }else{
-                    makeMove(game.getP2(), game.getP1(), 1);
                     playerPlaying=1;
+                    makeMove(game.getP2(), game.getP1(), 1);
                 }
             }
         });
@@ -85,11 +86,11 @@ public class GamePVP {
             @Override
             public void handle(ActionEvent event) {
             if(playerPlaying==1){
-                makeMove(game.getP1(), game.getP2(), 2);
                 playerPlaying=2;
+                makeMove(game.getP1(), game.getP2(), 2);
             }else{
-                makeMove(game.getP2(), game.getP1(), 2);
                 playerPlaying=1;
+                makeMove(game.getP2(), game.getP1(), 2);
             }
             }
         });
@@ -102,11 +103,11 @@ public class GamePVP {
             @Override
             public void handle(ActionEvent event) {
             if(playerPlaying==1){
-                makeMove(game.getP1(), game.getP2(), 3);
                 playerPlaying=2;
+                makeMove(game.getP1(), game.getP2(), 3);
             }else{
-                makeMove(game.getP2(), game.getP1(), 3);
                 playerPlaying=1;
+                makeMove(game.getP2(), game.getP1(), 3);
             }
             }
         });
@@ -130,7 +131,8 @@ public class GamePVP {
         container.setPadding(new Insets(20, 20, 20, 20));
             HBox container2 =new HBox();
             container2.setAlignment(Pos.CENTER);
-            container2.getChildren().addAll(group, drawButtons(primaryStage), new Label("10"), new Label("10"));
+            label = new Label("Player " + playerPlaying + "\n walls: " + (10-game.getP1().getWallCount()));//info to player 1
+            container2.getChildren().addAll(group, drawButtons(primaryStage), label);
         container.getChildren().addAll(group, container2);
         root.setCenter(container);
 
@@ -208,6 +210,7 @@ public class GamePVP {
         clearIBoard();
         game.makeMove(p1, direction);
         setIBoard();
+        label.setText("Player " + playerPlaying + "\n walls: " + (10-p2.getWallCount()));
         addInteractiveButtons(p2);
     }
 
@@ -307,7 +310,7 @@ public class GamePVP {
                         }
                     }
                 }catch(ArrayIndexOutOfBoundsException ex){
-                        JOptionPane.showMessageDialog(null, "You reach the maximun walls");
+                        System.out.println("You reach the maximun walls");
                 }
             }
         });

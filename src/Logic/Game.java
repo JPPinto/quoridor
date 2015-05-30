@@ -4,6 +4,7 @@ import minimax.Dijkstra;
 import minimax.Edge;
 import minimax.Vertex;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by João on 17/04/2015.
@@ -73,8 +74,8 @@ public class Game {
         for(int i=0; i<vertex[p.getTargetLine()].length; i++){
             double totalCost=vertex[p.getTargetLine()][i].minDistance;
             System.out.println("Distance to " + vertex[p.getPawn().getLine()][p.getPawn().getColumn()] + ": " + totalCost);
-            //List<Vertex> path = dijkstra.getShortestPathTo(vertex[p.getTargetLine()][i]);
-            //System.out.println("Path: " + path);
+            List<Vertex> path = dijkstra.getShortestPathTo(vertex[p.getTargetLine()][i]);
+            System.out.println("Path: " + path);
 
             if(minCost>totalCost){
                 minCost=totalCost;
@@ -100,22 +101,27 @@ public class Game {
                     cost=10000;
                 }
                 ArrayList<Edge> edges = new ArrayList<Edge>();
-                if (i + 1 < 17) {
-                    edges.add(new Edge(vertex[i + 1][j], cost));
-                }
-                if (i - 1 >= 0) {
-                    edges.add(new Edge(vertex[i - 1][j], cost));
-                }
-                if (j + 1 < 17) {
-                    edges.add(new Edge(vertex[i][j + 1], cost));
-                }
-                if (j - 1 >= 0) {
-                    edges.add(new Edge(vertex[i][j - 1], cost));
-                }
+                addEdge(edges, vertex, i+1, j,i+2, j,  cost);
+                addEdge(edges, vertex, i-1, j,i-2,j, cost);
+                addEdge(edges, vertex, i, j+1,i,j+2, cost);
+                addEdge(edges, vertex, i, j-1,i,j-2, cost);
+
                 vertex[i][j].adjacencies = new Edge[edges.size()];
                 vertex[i][j].adjacencies = edges.toArray(vertex[i][j].adjacencies);
                 cost=1;
             }
+        }
+    }
+
+    public void addEdge(ArrayList<Edge> edges, Vertex[][] vertex, int i, int j, int i2, int j2,int cost){
+        try{
+            if(i2>=0 && i2<17 && j2>=0 && j2<17 && (board.getBoard()[i2][j2]== Board.BoardState.WALL || board.getBoard()[i2][j2]== Board.BoardState.PLAYER)){
+                edges.add(new Edge(vertex[i][j], 10000));
+            }else{
+                edges.add(new Edge(vertex[i][j], cost));
+            }
+        }catch(ArrayIndexOutOfBoundsException ex){
+
         }
     }
 
@@ -124,10 +130,24 @@ public class Game {
             board.getBoard()[line][column-1]=state;
             board.getBoard()[line][column]=state;
             board.getBoard()[line][column+1]=state;
+
+            if(column-3>=0 && board.getBoard()[line][column-3]== Board.BoardState.WALL){
+                board.getBoard()[line][column-2]= Board.BoardState.WALL;
+            }
+            if(column+3<17 && board.getBoard()[line][column+3]== Board.BoardState.WALL){
+                board.getBoard()[line][column+2]=Board.BoardState.WALL;
+            }
         }else{
             board.getBoard()[line-1][column]=state;
             board.getBoard()[line][column]=state;
             board.getBoard()[line+1][column]=state;
+
+            if(line-3>=0 && board.getBoard()[line-3][column]== Board.BoardState.WALL){
+                board.getBoard()[line-2][column]= Board.BoardState.WALL;
+            }
+            if(line+3<17 && board.getBoard()[line+3][column]== Board.BoardState.WALL){
+                board.getBoard()[line+2][column]= Board.BoardState.WALL;
+            }
         }
     }
 
