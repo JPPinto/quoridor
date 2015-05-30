@@ -73,9 +73,9 @@ public class Game {
         dijkstra.computePaths(vertex[p.getPawn().getLine()][p.getPawn().getColumn()]);
         for(int i=0; i<vertex[p.getTargetLine()].length; i++){
             double totalCost=vertex[p.getTargetLine()][i].minDistance;
-            System.out.println("Distance to " + vertex[p.getPawn().getLine()][p.getPawn().getColumn()] + ": " + totalCost);
+            /*System.out.println("Distance to " + vertex[p.getPawn().getLine()][p.getPawn().getColumn()] + ": " + totalCost);
             List<Vertex> path = dijkstra.getShortestPathTo(vertex[p.getTargetLine()][i]);
-            System.out.println("Path: " + path);
+            System.out.println("Path: " + path);*/
 
             if(minCost>totalCost){
                 minCost=totalCost;

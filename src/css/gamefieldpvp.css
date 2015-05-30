@@ -83,3 +83,16 @@
     -fx-background-image: url("../images/vWall.png");
     -fx-background-size: cover;
 }
+
+.label{
+    -fx-background-radius: 500em;
+    -fx-pref-width: 100;
+    -fx-pref-height: 50;
+
+    -fx-effect: dropshadow(three-pass-box , rgba(0, 0, 0, 0.7), -4, -4, 4, 4);
+
+    -fx-background-color: #154352;
+
+    -fx-text-fill: white;
+    -fx-font: 15px "AngryBirds";
+}

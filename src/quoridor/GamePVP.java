@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -18,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -131,8 +133,7 @@ public class GamePVP {
         container.setPadding(new Insets(20, 20, 20, 20));
             HBox container2 =new HBox();
             container2.setAlignment(Pos.CENTER);
-            label = new Label("Player " + playerPlaying + "\n walls: " + (10-game.getP1().getWallCount()));//info to player 1
-            container2.getChildren().addAll(group, drawButtons(primaryStage), label);
+            container2.getChildren().addAll(group, drawButtons(primaryStage));
         container.getChildren().addAll(group, container2);
         root.setCenter(container);
 
@@ -210,7 +211,7 @@ public class GamePVP {
         clearIBoard();
         game.makeMove(p1, direction);
         setIBoard();
-        label.setText("Player " + playerPlaying + "\n walls: " + (10-p2.getWallCount()));
+        label.setText("       Player " + playerPlaying + "\n       Walls: " + (10-game.getP2().getWallCount()));
         addInteractiveButtons(p2);
     }
 
@@ -323,7 +324,7 @@ public class GamePVP {
         homebutton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Quoridor main_menu=new Quoridor();
+                Quoridor main_menu = new Quoridor();
                 main_menu.QuoridorInit(primaryStage);
                 primaryStage.setScene(main_menu.getScene());
             }
@@ -336,7 +337,7 @@ public class GamePVP {
         hWall.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                horizontal_wall=true;
+                horizontal_wall = true;
                 hWall.setOpacity(0.5);
                 vWall.setOpacity(1);
             }
@@ -348,11 +349,14 @@ public class GamePVP {
         vWall.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                horizontal_wall=false;
+                horizontal_wall = false;
                 hWall.setOpacity(1);
                 vWall.setOpacity(0.5);
             }
         });
+
+        label = new Label("       Player " + playerPlaying + "\n       Walls: " + (10-game.getP1().getWallCount()));//info to player 1
+        label.setContentDisplay(ContentDisplay.CENTER);
 
         GridPane gamepvp_buttons = new GridPane();
         gamepvp_buttons.setHgap(20);
@@ -360,6 +364,7 @@ public class GamePVP {
         gamepvp_buttons.add(homebutton, 1, 1);
         gamepvp_buttons.add(hWall, 2, 1);
         gamepvp_buttons.add(vWall, 3, 1);
+        gamepvp_buttons.add(label, 4, 1);
         gamepvp_buttons.setAlignment(Pos.CENTER);
 
         return gamepvp_buttons;

@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Scene;
@@ -18,8 +19,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
-import javax.swing.*;
 
 /**
  * Created by João on 02/03/2015.
@@ -32,6 +31,7 @@ public class GamePVE {
     private Stage stage;
     private Button up, down, left, right, hWall, vWall;
     private GridPane iBoard;
+    private Label label;
 
     private boolean horizontal_wall=true;
     private int playerPlaying=1;
@@ -50,11 +50,11 @@ public class GamePVE {
             @Override
             public void handle(ActionEvent event) {
                 if(playerPlaying==1){
-                    makeMove(game.getP1(), game.getP2(), 0);
                     playerPlaying=2;
+                    makeMove(game.getP1(), game.getP2(), 0);
                 }else{
-                    makeMove(game.getP2(), game.getP1(), 0);
                     playerPlaying=1;
+                    makeMove(game.getP2(), game.getP1(), 0);
                 }
             }
         });
@@ -67,11 +67,11 @@ public class GamePVE {
             @Override
             public void handle(ActionEvent event) {
                 if(playerPlaying==1){
-                    makeMove(game.getP1(), game.getP2(), 1);
                     playerPlaying=2;
+                    makeMove(game.getP1(), game.getP2(), 1);
                 }else{
-                    makeMove(game.getP2(), game.getP1(), 1);
                     playerPlaying=1;
+                    makeMove(game.getP2(), game.getP1(), 1);
                 }
             }
         });
@@ -84,11 +84,11 @@ public class GamePVE {
             @Override
             public void handle(ActionEvent event) {
                 if(playerPlaying==1){
-                    makeMove(game.getP1(), game.getP2(), 2);
                     playerPlaying=2;
+                    makeMove(game.getP1(), game.getP2(), 2);
                 }else{
-                    makeMove(game.getP2(), game.getP1(), 2);
                     playerPlaying=1;
+                    makeMove(game.getP2(), game.getP1(), 2);
                 }
             }
         });
@@ -101,11 +101,11 @@ public class GamePVE {
             @Override
             public void handle(ActionEvent event) {
                 if(playerPlaying==1){
-                    makeMove(game.getP1(), game.getP2(), 3);
                     playerPlaying=2;
+                    makeMove(game.getP1(), game.getP2(), 3);
                 }else{
-                    makeMove(game.getP2(), game.getP1(), 3);
                     playerPlaying=1;
+                    makeMove(game.getP2(), game.getP1(), 3);
                 }
             }
         });
@@ -127,7 +127,11 @@ public class GamePVE {
         container.setAlignment(Pos.CENTER);
         container.setSpacing(10);
         container.setPadding(new Insets(20, 20, 20, 20));
-        container.getChildren().addAll(group, drawButtons(primaryStage));
+        HBox container2 =new HBox();
+        container2.setAlignment(Pos.CENTER);
+        label = new Label("Player " + playerPlaying + "\n walls: " + (10-game.getP1().getWallCount()));//info to player 1
+        container2.getChildren().addAll(group, drawButtons(primaryStage), label);
+        container.getChildren().addAll(group, container2);
         root.setCenter(container);
 
         scene = new Scene(root, 600, 600);
@@ -204,6 +208,7 @@ public class GamePVE {
         clearIBoard();
         game.makeMove(p1, direction);
         setIBoard();
+        label.setText("Player " + playerPlaying + "\n walls: " + (10 - p2.getWallCount()));
         addInteractiveButtons(p2);
     }
 
@@ -288,16 +293,22 @@ public class GamePVE {
 
                 try {
                     if (playerPlaying == 1) {
-                        game.createWall(game.getP1(), game.getP2(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
-                        makeMove(game.getP1(), game.getP2(), 4);
-                        playerPlaying = 2;
+                        if(!game.createWall(game.getP1(), game.getP2(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
+                            System.out.println("You cant place wall there! Play again");
+                        }else{
+                            makeMove(game.getP1(), game.getP2(), 4);
+                            playerPlaying = 2;
+                        }
                     } else {
-                        game.createWall(game.getP2(), game.getP1(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node));
-                        makeMove(game.getP2(), game.getP1(), 4);
-                        playerPlaying = 1;
+                        if(!game.createWall(game.getP2(), game.getP1(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
+                            System.out.println("You cant place wall there! Play again");
+                        }else{
+                            makeMove(game.getP2(), game.getP1(), 4);
+                            playerPlaying = 1;
+                        }
                     }
                 }catch(ArrayIndexOutOfBoundsException ex){
-                    JOptionPane.showMessageDialog(null, "You reach the maximun walls");
+                    System.out.println("You reach the maximun walls");
                 }
             }
         });
