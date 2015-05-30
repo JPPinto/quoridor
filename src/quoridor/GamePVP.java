@@ -19,10 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
-import javax.swing.*;
 
 /**
  * Created by João on 02/03/2015.
@@ -38,7 +35,6 @@ public class GamePVP {
     private Label label;
 
     private boolean horizontal_wall=true;
-    private int playerPlaying=1;
 
     public GamePVP(final Stage primaryStage){
 
@@ -53,11 +49,11 @@ public class GamePVP {
         up.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(playerPlaying==1){
-                    playerPlaying=2;
+                if(game.getCurrentPlayer()==1){
+                    game.setCurrentPlayer(2);
                     makeMove(game.getP1(), game.getP2(), 0);
                 }else{
-                    playerPlaying=1;
+                    game.setCurrentPlayer(1);
                     makeMove(game.getP2(), game.getP1(), 0);
                 }
             }
@@ -70,11 +66,11 @@ public class GamePVP {
         down.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(playerPlaying==1){
-                    playerPlaying=2;
+                if(game.getCurrentPlayer()==1){
+                    game.setCurrentPlayer(2);
                     makeMove(game.getP1(), game.getP2(), 1);
                 }else{
-                    playerPlaying=1;
+                    game.setCurrentPlayer(1);
                     makeMove(game.getP2(), game.getP1(), 1);
                 }
             }
@@ -87,11 +83,11 @@ public class GamePVP {
         left.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            if(playerPlaying==1){
-                playerPlaying=2;
+            if(game.getCurrentPlayer()==1){
+                game.setCurrentPlayer(2);
                 makeMove(game.getP1(), game.getP2(), 2);
             }else{
-                playerPlaying=1;
+                game.setCurrentPlayer(1);
                 makeMove(game.getP2(), game.getP1(), 2);
             }
             }
@@ -104,11 +100,11 @@ public class GamePVP {
         right.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            if(playerPlaying==1){
-                playerPlaying=2;
+            if(game.getCurrentPlayer()==1){
+                game.setCurrentPlayer(2);
                 makeMove(game.getP1(), game.getP2(), 3);
             }else{
-                playerPlaying=1;
+                game.setCurrentPlayer(1);
                 makeMove(game.getP2(), game.getP1(), 3);
             }
             }
@@ -211,7 +207,7 @@ public class GamePVP {
         clearIBoard();
         game.makeMove(p1, direction);
         setIBoard();
-        label.setText("       Player " + playerPlaying + "\n       Walls: " + (10-game.getP2().getWallCount()));
+        label.setText("       Player " + game.getCurrentPlayer() + "\n       Walls: " + (10 - game.getP2().getWallCount()));
         addInteractiveButtons(p2);
     }
 
@@ -295,19 +291,19 @@ public class GamePVP {
             public void handle(MouseEvent mouseEvent) {
 
                 try {
-                    if (playerPlaying == 1) {
+                    if (game.getCurrentPlayer() == 1) {
                         if(!game.createWall(game.getP1(), game.getP2(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
                             System.out.println("You cant place wall there! Play again");
                         }else{
                             makeMove(game.getP1(), game.getP2(), 4);
-                            playerPlaying = 2;
+                            game.setCurrentPlayer(2);
                         }
                     } else {
                         if(!game.createWall(game.getP2(), game.getP1(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
                             System.out.println("You cant place wall there! Play again");
                         }else{
                             makeMove(game.getP2(), game.getP1(), 4);
-                            playerPlaying = 1;
+                            game.setCurrentPlayer(1);
                         }
                     }
                 }catch(ArrayIndexOutOfBoundsException ex){
@@ -355,7 +351,7 @@ public class GamePVP {
             }
         });
 
-        label = new Label("       Player " + playerPlaying + "\n       Walls: " + (10-game.getP1().getWallCount()));//info to player 1
+        label = new Label("       Player " + game.getCurrentPlayer() + "\n       Walls: " + (10-game.getP1().getWallCount()));//info to player 1
         label.setContentDisplay(ContentDisplay.CENTER);
 
         GridPane gamepvp_buttons = new GridPane();

@@ -16,6 +16,12 @@ public class Player {
         this.target_line=target_line;
     }
 
+    public Player(Player player){
+        setPawn(new Pawn(player.getPawn().getLine(), player.getPawn().getColumn(), player.getPawn().getID(), player.getPawn().getName()));
+        wall = player.getWall();
+        this.target_line=player.getTargetLine();
+    }
+
     public Pawn getPawn() {
         return pawn;
     }

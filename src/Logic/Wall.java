@@ -42,4 +42,8 @@ public class Wall {
     public void setColumn(int column) {
         this.column = column;
     }
+
+    public boolean isHorizontal(WDirection dir){
+        return dir==WDirection.HORIZONTAL?true:false;
+    }
 }

@@ -10,11 +10,13 @@ public class Pawn {
     private int column;
     private int ID;
     private Image image;
+    private String name;
 
     public Pawn(int line, int column, int ID, String name){
         this.setLine(line);
         this.setColumn(column);
         this.setID(ID);
+        this.name=name;
         setImage(new Image(getClass().getResourceAsStream("/images/"+name+".png")));
     }
 
@@ -56,5 +58,9 @@ public class Pawn {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public String getName(){
+        return name;
     }
 }
