@@ -101,10 +101,10 @@ public class Game {
                     cost=10000;
                 }
                 ArrayList<Edge> edges = new ArrayList<Edge>();
-                addEdge(edges, vertex, i+1, j,i+2, j,  cost);
-                addEdge(edges, vertex, i-1, j,i-2,j, cost);
-                addEdge(edges, vertex, i, j+1,i,j+2, cost);
-                addEdge(edges, vertex, i, j-1,i,j-2, cost);
+                addEdge(edges, vertex, i+1, j,  cost);
+                addEdge(edges, vertex, i-1, j, cost);
+                addEdge(edges, vertex, i, j+1, cost);
+                addEdge(edges, vertex, i, j-1, cost);
 
                 vertex[i][j].adjacencies = new Edge[edges.size()];
                 vertex[i][j].adjacencies = edges.toArray(vertex[i][j].adjacencies);
@@ -113,13 +113,9 @@ public class Game {
         }
     }
 
-    public void addEdge(ArrayList<Edge> edges, Vertex[][] vertex, int i, int j, int i2, int j2,int cost){
+    public void addEdge(ArrayList<Edge> edges, Vertex[][] vertex, int i, int j, int cost){
         try{
-            if(i2>=0 && i2<17 && j2>=0 && j2<17 && (board.getBoard()[i2][j2]== Board.BoardState.WALL || board.getBoard()[i2][j2]== Board.BoardState.PLAYER)){
-                edges.add(new Edge(vertex[i][j], 10000));
-            }else{
-                edges.add(new Edge(vertex[i][j], cost));
-            }
+            edges.add(new Edge(vertex[i][j], cost));
         }catch(ArrayIndexOutOfBoundsException ex){
 
         }
