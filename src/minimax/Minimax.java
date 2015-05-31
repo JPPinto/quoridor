@@ -53,7 +53,7 @@ public class Minimax {
             for (String move:node.validMoves()) {
                 GameState child = new GameState(node);
                 child.move(move);
-                val = minimaxAlphaBeta(child, depth-1, alpha, beta, false);
+                val = minimaxAlphaBeta(child, depth - 1, alpha, beta, false);
                 if (val > alpha) {
                     alpha = val;
                     bestMove = move;
@@ -105,5 +105,13 @@ public class Minimax {
 
     public int heuristic(GameState gs) {
         return gs.shortestPathToRow(gs.player1Square, 0).size()-gs.shortestPathToRow(gs.player2Square, 8).size();
+    }
+
+    public Object fromString(String move){
+        if(move.length() == 3){
+            return new Wall(move);
+        } else {
+            return new Square(move);
+        }
     }
 }

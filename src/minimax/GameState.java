@@ -14,16 +14,21 @@ public class GameState {
     static final int BOARD_SIZE = 9;
     static final char PLAYER_1_ICON = 'A';
     static final char PLAYER_2_ICON = 'B';
-
+    /**
+     * A hybrid graph representation as suggested by van Rossum and Cormen et al:
+     * A hash table is used to associate each vertex with a doubly linked list of adjacent vertices
+     */
     protected HashMap <Square,LinkedList<Square>> adjacencyList = new HashMap <Square,LinkedList<Square>> ();
-    Square player1Square = new Square("e1");
-    Square player2Square = new Square("e9");
+    Square player1Square = new Square("e9");
+    Square player2Square = new Square("e1");
     LinkedList <Wall> walls = new LinkedList<Wall>();
     int numWalls1 = 0;
     int numWalls2 = 0;
     int turn = 0;
 
-
+    /**
+     * No args contructor. Initializes the adjacency list.
+     */
     public GameState() {
         // Initialize adjacency list
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -42,6 +47,10 @@ public class GameState {
         }
     }
 
+    /**
+     * Copy constructor
+     * @param gs
+     */
     public GameState(GameState gs) {
         for (Square sq:gs.adjacencyList.keySet()) {
             LinkedList<Square> list = new LinkedList<Square>();
@@ -53,6 +62,7 @@ public class GameState {
         walls.addAll(gs.walls);
         turn = gs.turn;
     }
+
 
     public GameState(Game game) {
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -78,43 +88,70 @@ public class GameState {
             placeWall(wall);
             walls.add(wall);
         }
+        turn=game.getTurn();
     }
 
     /**
      * String constructor
      * @param moves
      */
-        public GameState(List <String> moves) {
+    public GameState(List <String> moves) {
         this();
         for (String e:moves) {
             move(e);
         }
     }
 
+    // TODO: Need to check preconditions
+    /**
+     * Add squares a and b to each others corresponding adjacency list
+     * @param a
+     * @param b
+     */
     protected void addEdge (Square a, Square b) {
         // Edges are undirected
         adjacencyList.get(a).add(b);
         adjacencyList.get(b).add(a);
     }
 
+    /**
+     * The player who's turn it is.
+     * @return 0 if player 1, 1 if player 2.
+     */
     public int currentPlayer () {
         return turn%2;
     }
 
+    /**
+     * @return the position of the player who's turn it is
+     */
     public Square currentPlayerPosition () {
         return currentPlayer () == 0 ? player1Square : player2Square;
     }
 
+    /**
+     * Prints the adjacency list
+     */
     protected void displayAdjacencyList () {
         for (Square e:adjacencyList.keySet()) {
             System.out.println(e+": "+adjacencyList.get(e));
         }
     }
 
+    /**
+     * Checks that both players has path to the goal.
+     * @return
+     */
     protected boolean hasPathToGoal () {
         return !(shortestPathToRow(player1Square, 0).isEmpty() || shortestPathToRow(player2Square, 8).isEmpty());
     }
 
+    /**
+     * For printing. Checks the (i, j) coordinate has a player.
+     * @param i
+     * @param j
+     * @return
+     */
     protected boolean hasPlayer (int i, int j) {
         if (i%2 == 1 && j%2 == 1) {
             Square transformed = transform(i, j);
@@ -123,6 +160,12 @@ public class GameState {
         return false;
     }
 
+    /**
+     * For printing. Checks the (i, j) coordinate has a wall.
+     * @param i
+     * @param j
+     * @return
+     */
     protected boolean hasWall (int i, int j) {
         if (i%2==0) {
             return walls.contains(new Wall(transform(i-1, j), Logic.Wall.WDirection.HORIZONTAL)) || walls.contains(new Wall(transform(i-1, j-2), Logic.Wall.WDirection.HORIZONTAL));
@@ -141,14 +184,24 @@ public class GameState {
         return new Square((i-1)>>1, (j-1)>>1);
     }
 
+    /**
+     * Terminal Test
+     * @return true if any player has reached the other side
+     */
     public boolean isOver() {
         return player1Square.getRow() == 0 || player2Square.getRow() == 8;
     }
 
+    /**
+     * @return 0 if player1 won. 1 if player2 won.
+     */
     public int winner () {
         return player1Square.getRow() == 0 ? 0 : 1;
     }
 
+    /**
+     * @return The icon representing the winner, for consistency of display
+     */
     protected char winnerIcon () {
         return winner() == 0 ? PLAYER_1_ICON : PLAYER_2_ICON;
     }
@@ -161,12 +214,23 @@ public class GameState {
         return isValidSyntax(move) && move.length() == 2;
     }
 
+    /**
+     * Sytax checking using regular expressions
+     * @param move
+     * @return true if move matches regular expression for valid move
+     */
     protected boolean isValidSyntax (String move) {
         Pattern p = Pattern.compile("[a-i][0-9][hv]?");
         Matcher m = p.matcher(move);
         return m.matches();
     }
 
+    /**
+     * Traversal move validator. Uses adjacency list and other computations to verify validity.
+     * See design report for further information.
+     * @param dest
+     * @return true if traversal from current player's position to dest is legal.
+     */
     public boolean isValidTraversal (Square dest) {
         if (dest.equals(currentPlayerPosition()) || dest.equals(otherPlayerPosition())) {
             return false;
@@ -182,6 +246,9 @@ public class GameState {
         return false;
     }
 
+    /**
+     * @return the number of walls the current player has.
+     */
     public int currentPlayerNumWalls() {
         if (currentPlayer()==0) {
             return numWalls1;
@@ -190,6 +257,9 @@ public class GameState {
         }
     }
 
+    /**
+     * @return the number of walls the other player has.
+     */
     public int otherPlayerNumWalls() {
         if (currentPlayer()==0) {
             return numWalls2;
@@ -198,8 +268,19 @@ public class GameState {
         }
     }
 
+    /**
+     * See design report for further information.
+     * @param wall
+     * @return true if the placement of the wall is valid
+     */
     public boolean isValidWallPlacement (Wall wall) {
 
+        // Check number of walls placed has not been exceeded for any player
+		/*
+		if (!(numWalls1 < 10 && numWalls2 < 10)) {
+			return false;
+		}
+		*/
         if (currentPlayerNumWalls() >= 10) {
             return false;
         }
@@ -243,10 +324,18 @@ public class GameState {
         return hasPath;
     }
 
+    /**
+     * @param move
+     * @return true if the string represents a wall placement move
+     */
     protected boolean isWallPlacement (String move) {
         return isValidSyntax(move) && move.length() == 3;
     }
 
+    /**
+     * Mutator method for mutating game state. Return false if invalid move.
+     * @param move
+     */
     public boolean move (String move) {
         boolean valid = true;
         valid &= !isOver();
@@ -269,10 +358,18 @@ public class GameState {
         return valid;
     }
 
+
+    /**
+     * @return position of the other player
+     */
     public Square otherPlayerPosition () {
         return currentPlayerPosition().equals(player1Square) ? player2Square : player1Square;
     }
 
+    /**
+     * Called after validity check passes. Update fields accordingly, e.g. add walls, etc.
+     * @param wall
+     */
     protected void placeWall(Wall wall) {
         if (currentPlayer()==0) {
             numWalls1++;

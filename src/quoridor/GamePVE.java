@@ -21,6 +21,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import minimax.GameState;
+import minimax.Square;
+import minimax.Wall;
 
 /**
  * Created by João on 02/03/2015.
@@ -51,9 +53,6 @@ public class GamePVE {
             @Override
             public void handle(ActionEvent event) {
                 makeMove(0);
-                game.nextPlayer();
-                GameState gs = new GameState(game);
-                System.out.println("Move: " + game.getM1().getMove(gs));
             }
         });
 
@@ -65,9 +64,6 @@ public class GamePVE {
             @Override
             public void handle(ActionEvent event) {
                 makeMove(1);
-                game.nextPlayer();
-                GameState gs = new GameState(game);
-                System.out.println("Move: " + game.getM1().getMove(gs));
             }
         });
 
@@ -79,9 +75,6 @@ public class GamePVE {
             @Override
             public void handle(ActionEvent event) {
                 makeMove(2);
-                game.nextPlayer();
-                GameState gs = new GameState(game);
-                System.out.println("Move: " + game.getM1().getMove(gs));
             }
         });
 
@@ -93,9 +86,6 @@ public class GamePVE {
             @Override
             public void handle(ActionEvent event) {
                 makeMove(3);
-                game.nextPlayer();
-                GameState gs = new GameState(game);
-                System.out.println("Move: " + game.getM1().getMove(gs));
             }
         });
 
@@ -108,7 +98,7 @@ public class GamePVE {
         iBoard.setHgap(5);
         iBoard.setVgap(5);
         setIBoard();
-        addInteractiveButtons(game.getP1());//add first player
+        addInteractiveButtons(game.getP1());
         Group group = new Group(iBoard);
 
         //reoraginize nodes position (vertical alignment)
@@ -121,6 +111,10 @@ public class GamePVE {
         container2.getChildren().addAll(group, drawButtons(primaryStage));
         container.getChildren().addAll(group, container2);
         root.setCenter(container);
+
+        //makeAIMove();
+        //game.nextPlayer();
+        //addInteractiveButtons(game.getP2());
 
         scene = new Scene(root, 600, 600);
         scene.getStylesheets().add("css/gamefieldpvp.css");
@@ -195,9 +189,34 @@ public class GamePVE {
     public void makeMove(int direction){
         clearIBoard();
         game.makeMove(game.currentPlayerPlaying(), direction);
+        game.verifyWinning(game.currentPlayerPlaying().getPawn());
+        game.nextTurn();
         setIBoard();
         label.setText("       Player " + game.getOtherPlayer() + "\n       Walls: " + game.otherPlayerPlaying().leftWallNum());
-        addInteractiveButtons(game.otherPlayerPlaying());
+        game.nextPlayer();
+
+        makeAIMove();
+        game.verifyWinning(game.currentPlayerPlaying().getPawn());
+        game.nextTurn();
+        game.nextPlayer();
+        addInteractiveButtons(game.getP1());
+    }
+
+    public void makeAIMove(){
+        clearIBoard();
+        GameState gs = new GameState(game);
+        Object obj = game.getM1().fromString(game.getM1().getMove(gs));
+        if(obj instanceof Wall){
+            System.out.println("Placing WALL on Row:  " + ((Wall) obj).getNorthWest().getRow() + " Colunm: "+ ((Wall) obj).getNorthWest().getColumn());
+            //game.getWall().add(new Logic.Wall(((Wall) obj).getOrientation(), ((Wall) obj).getNorthWest().getRow()*2, ((Wall) obj).getNorthWest().getColumn()*2));
+            //game.getBoard().getBoard()[((Wall) obj).getNorthWest().getRow()*2][((Wall) obj).getNorthWest().getColumn()*2]= Board.BoardState.WALL;
+        }else{
+            System.out.println("line = "+(((Square)obj).getRow())+"|column = "+(((Square)obj).getColumn()));
+            game.getP2().getPawn().setLine(((Square)obj).getRow()*2);
+            game.getP2().getPawn().setColumn(((Square)obj).getColumn()*2);
+            //game.getBoard().getBoard()[((Square)obj).getRow()*2][((Square)obj).getColumn()*2]= Board.BoardState.PLAYER;
+        }
+        setIBoard();
     }
 
     private Rectangle createBlock() {

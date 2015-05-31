@@ -18,13 +18,14 @@ public class Game {
     private Minimax m2;
     private int playerPlaying=1;
     private ArrayList<Wall> walls;
+    private int turn=0;
 
     public Game(){
 
         //init board and players
         board = new Board();
-        p1 = new Player(0, 8, 1, "pawn1", 16);
-        p2 = new Player(16, 8, 2, "pawn2", 0);
+        p1 = new Player(16, 8, 1, "pawn1", 0);
+        p2 = new Player(0, 8, 2, "pawn2", 16);
         walls = new ArrayList<Wall>();
     }
 
@@ -32,8 +33,8 @@ public class Game {
 
         //init board and players
         board = new Board();
-        p1 = new Player(0, 8, 1, "pawn1", 16);
-        p2 = new Player(16, 8, 2, "pawn2", 0);
+        p1 = new Player(16, 8, 1, "pawn1", 0);
+        p2 = new Player(0, 8, 2, "pawn2", 16);
         m1 = new Minimax(depth);
         walls = new ArrayList<Wall>();
     }
@@ -41,14 +42,12 @@ public class Game {
     public void makeMove(Player p, int direction){
         board.setBoard(p.getPawn(), direction);
         board.printMatrix();
-
-        verifyWinning(p.getPawn());
     }
 
     public void verifyWinning(Pawn p){
-        if(p.getLine()==16 && p.getID()==1){
+        if(p.getLine()==0 && p.getID()==1){
             System.out.println("Player 1 - You win");
-        }else if(p.getLine()==0 && p.getID()==2){
+        }else if(p.getLine()==16 && p.getID()==2){
             System.out.println("Player 2 - You win");
         }
     }
@@ -241,5 +240,13 @@ public class Game {
 
     public void setM2(Minimax m2) {
         this.m2 = m2;
+    }
+
+    public int getTurn(){
+        return turn;
+    }
+
+    public void nextTurn(){
+        turn += 1;
     }
 }
