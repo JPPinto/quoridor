@@ -20,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import minimax.GameState;
 
 /**
  * Created by João on 02/03/2015.
@@ -40,7 +41,9 @@ public class GamePVE {
 
         primaryStage.setTitle("Quoridor");
         stage=primaryStage;
-        game = new Game();
+        game = new Game(2);
+        GameState gs = new GameState(game);
+        System.out.println("Move: "+game.getM1().getMove(gs));
 
         //create interactive button up
         up=new Button();

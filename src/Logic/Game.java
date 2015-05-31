@@ -2,6 +2,7 @@ package Logic;
 
 import minimax.Dijkstra;
 import minimax.Edge;
+import minimax.Minimax;
 import minimax.Vertex;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,6 +16,8 @@ public class Game {
     private Board board;
     private Player p1;
     private Player p2;
+    private Minimax m1;
+    private Minimax m2;
     private int playerPlaying=1;
     private ArrayList<Wall> walls;
 
@@ -24,6 +27,16 @@ public class Game {
         board = new Board();
         p1 = new Player(0, 8, 1, "pawn1", 16);
         p2 = new Player(16, 8, 2, "pawn2", 0);
+        walls = new ArrayList<Wall>();
+    }
+
+    public Game(int depth){
+
+        //init board and players
+        board = new Board();
+        p1 = new Player(0, 8, 1, "pawn1", 16);
+        p2 = new Player(16, 8, 2, "pawn2", 0);
+        m1 = new Minimax(depth);
         walls = new ArrayList<Wall>();
     }
 
@@ -43,7 +56,7 @@ public class Game {
     }
 
     public boolean createWall(boolean horizontal_wall, int line, int column){
-        if(board.getBoard()[line][column]!= Board.BoardState.WALL && verifyWallPosition(currentPlayerPlaying(), horizontal_wall, line, column)<1000 && verifyWallPosition(otherPlayerPlaying(), horizontal_wall, line, column)<1000){
+        if(currentPlayerPlaying().usedWallNum()<10 && board.getBoard()[line][column]!= Board.BoardState.WALL && verifyWallPosition(currentPlayerPlaying(), horizontal_wall, line, column)<1000 && verifyWallPosition(otherPlayerPlaying(), horizontal_wall, line, column)<1000){
             Wall wall = new Wall(horizontal_wall ? Wall.WDirection.HORIZONTAL : Wall.WDirection.VERTICAL, line, column);
             walls.add(wall);
             board.createWall(horizontal_wall, line, column);
@@ -214,5 +227,21 @@ public class Game {
         }else{
             playerPlaying=1;
         }
+    }
+
+    public Minimax getM1() {
+        return m1;
+    }
+
+    public void setM1(Minimax m1) {
+        this.m1 = m1;
+    }
+
+    public Minimax getM2() {
+        return m2;
+    }
+
+    public void setM2(Minimax m2) {
+        this.m2 = m2;
     }
 }
