@@ -15,10 +15,10 @@ public class Dijkstra {
             Vertex u = vertexQueue.poll();
 
             // Visit each edge exiting u
-            if (u.adjacencies != null) {
-                for (Edge e : u.adjacencies) {
-                    Vertex v = e.target;
-                    double weight = e.weight;
+            if (!u.adjacencies.isEmpty()) {
+                for (Object e : u.adjacencies) {
+                    Vertex v = ((Edge)e).target;
+                    double weight = ((Edge)e).weight;
                     double distanceThroughU = u.minDistance + weight;
                     if (distanceThroughU < v.minDistance) {
                         vertexQueue.remove(v);

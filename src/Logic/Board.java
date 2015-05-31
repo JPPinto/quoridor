@@ -65,7 +65,7 @@ public class Board {
         }
     }
 
-    public void createWall(Wall wall, Boolean horizontal_wall, int line, int column){
+    public void createWall(Boolean horizontal_wall, int line, int column){
 
         if(horizontal_wall){
             board[line][column]=BoardState.WALL;
@@ -90,8 +90,6 @@ public class Board {
                 board[line+2][column]=BoardState.WALL;
             }
         }
-        wall.setLine(line);
-        wall.setColumn(column);
     }
 
     public void printMatrix(){

@@ -49,13 +49,8 @@ public class GamePVE {
         up.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(game.getCurrentPlayer()==1){
-                    game.setCurrentPlayer(2);
-                    makeMove(game.getP1(), game.getP2(), 0);
-                }else{
-                    game.setCurrentPlayer(1);
-                    makeMove(game.getP2(), game.getP1(), 0);
-                }
+                makeMove(0);
+                game.nextPlayer();
             }
         });
 
@@ -66,13 +61,8 @@ public class GamePVE {
         down.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(game.getCurrentPlayer()==1){
-                    game.setCurrentPlayer(2);
-                    makeMove(game.getP1(), game.getP2(), 1);
-                }else{
-                    game.setCurrentPlayer(1);
-                    makeMove(game.getP2(), game.getP1(), 1);
-                }
+                makeMove(1);
+                game.nextPlayer();
             }
         });
 
@@ -83,13 +73,8 @@ public class GamePVE {
         left.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(game.getCurrentPlayer()==1){
-                    game.setCurrentPlayer(2);
-                    makeMove(game.getP1(), game.getP2(), 2);
-                }else{
-                    game.setCurrentPlayer(1);
-                    makeMove(game.getP2(), game.getP1(), 2);
-                }
+                makeMove(2);
+                game.nextPlayer();
             }
         });
 
@@ -100,13 +85,8 @@ public class GamePVE {
         right.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(game.getCurrentPlayer()==1){
-                    game.setCurrentPlayer(2);
-                    makeMove(game.getP1(), game.getP2(), 3);
-                }else{
-                    game.setCurrentPlayer(1);
-                    makeMove(game.getP2(), game.getP1(), 3);
-                }
+                makeMove(3);
+                game.nextPlayer();
             }
         });
 
@@ -203,12 +183,12 @@ public class GamePVE {
         }
     }
 
-    public void makeMove(Player p1, Player p2,  int direction){
+    public void makeMove(int direction){
         clearIBoard();
-        game.makeMove(p1, direction);
+        game.makeMove(game.currentPlayerPlaying(), direction);
         setIBoard();
-        label.setText("       Player " + game.getCurrentPlayer() + "\n       Walls: " + (10 - game.getP2().getWallCount()));
-        addInteractiveButtons(p2);
+        label.setText("       Player " + game.getOtherPlayer() + "\n       Walls: " + game.otherPlayerPlaying().leftWallNum());
+        addInteractiveButtons(game.otherPlayerPlaying());
     }
 
     private Rectangle createBlock() {
@@ -291,20 +271,11 @@ public class GamePVE {
             public void handle(MouseEvent mouseEvent) {
 
                 try {
-                    if (game.getCurrentPlayer() == 1) {
-                        if(!game.createWall(game.getP1(), game.getP2(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
-                            System.out.println("You cant place wall there! Play again");
-                        }else{
-                            makeMove(game.getP1(), game.getP2(), 4);
-                            game.setCurrentPlayer(2);
-                        }
-                    } else {
-                        if(!game.createWall(game.getP2(), game.getP1(), horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
-                            System.out.println("You cant place wall there! Play again");
-                        }else{
-                            makeMove(game.getP2(), game.getP1(), 4);
-                            game.setCurrentPlayer(1);
-                        }
+                    if(!game.createWall(horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
+                        System.out.println("You cant place wall there! Play again");
+                    }else{
+                        makeMove(4);
+                        game.nextPlayer();
                     }
                 }catch(ArrayIndexOutOfBoundsException ex){
                     System.out.println("You reach the maximun walls");
@@ -351,7 +322,7 @@ public class GamePVE {
             }
         });
 
-        label = new Label("       Player " + game.getCurrentPlayer() + "\n       Walls: " + (10-game.getP1().getWallCount()));//info to player 1
+        label = new Label("       Player " + game.getCurrentPlayer() + "\n       Walls: " + game.currentPlayerPlaying().leftWallNum());//info to player 1
         label.setContentDisplay(ContentDisplay.CENTER);
 
         GridPane gamepvp_buttons = new GridPane();

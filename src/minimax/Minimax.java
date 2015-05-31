@@ -1,27 +1,59 @@
 package minimax;
 
-import Logic.Game;
-import Logic.Wall;
-
 import java.util.List;
 
 /**
- * Created by João on 28/05/2015.
+ * @author louistiao
+ * An abstract AIPlayer class which provides standard minimax algorithm methods for inheriting classes to use
  */
 public class Minimax {
 
-    private Object bestMove;//wall or pawn
+    String bestMove = new String();
+    int depth;
 
-    public double minimaxAlphaBetaWithMove (Game node, int depth, double alpha, double beta, boolean maxPlayer ) {
+    public Minimax(int depth){
+        this.depth=depth;
+    }
+
+    public String getMove(GameState gs) {
+        if (gs.currentPlayer()==0) {
+            if (gs.numWalls1 == 10) {
+                List<Square> path = gs.shortestPathToWin();
+                if (gs.isValidTraversal(path.get(0))) {
+                    return path.get(0).toString();
+                } else {
+                    List <String> validMoves = gs.validMoves();
+                    return validMoves.get((int)(Math.random() * validMoves.size()));
+                }
+            } else {
+                minimaxAlphaBetaWithMove(gs, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+            }
+        } else {
+            if (gs.numWalls2 == 10) {
+                List <Square> path = gs.shortestPathToWin();
+                if (gs.isValidTraversal(path.get(0))) {
+                    return path.get(0).toString();
+                } else {
+                    List <String> validMoves = gs.validMoves();
+                    return validMoves.get((int)(Math.random() * validMoves.size()));
+                }
+            } else {
+                minimaxAlphaBetaWithMove(gs, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+            }
+        }
+        return bestMove;
+    }
+
+    public int minimaxAlphaBetaWithMove (GameState node, int depth, int alpha, int beta, boolean maxPlayer ) {
         if (depth == 0 || node.isOver()) {
             return heuristic(node);
         }
         if (maxPlayer) {
-            double val;
-            for (Object move:node.validMoves()) {
-                Game child = new Game(node);
+            int val;
+            for (String move:node.validMoves()) {
+                GameState child = new GameState(node);
                 child.move(move);
-                val = minimaxAlphaBeta(child, depth - 1, alpha, beta, false);
+                val = minimaxAlphaBeta(child, depth-1, alpha, beta, false);
                 if (val > alpha) {
                     alpha = val;
                     bestMove = move;
@@ -32,8 +64,8 @@ public class Minimax {
             }
             return alpha;
         } else {
-            for (Object move:node.validMoves()) {
-                Game child = new Game(node);
+            for (String move:node.validMoves()) {
+                GameState child = new GameState(node);
                 child.move(move);
                 beta = Math.min(beta, minimaxAlphaBeta(child, depth-1, alpha, beta, true));
                 if (beta <= alpha) {
@@ -44,23 +76,23 @@ public class Minimax {
         }
     }
 
-    public double minimaxAlphaBeta(Game node, int depth, double alpha, double beta, boolean maxPlayer ) {
+    public int minimaxAlphaBeta(GameState node, int depth, int alpha, int beta, boolean maxPlayer ) {
         if (depth == 0 || node.isOver()) {
             return heuristic(node);
         }
         if (maxPlayer) {
-            for (Object move:node.validMoves()) {
-                Game child = new Game(node);
+            for (String move:node.validMoves()) {
+                GameState child = new GameState(node);
                 child.move(move);
-                alpha = Math.max(alpha, minimaxAlphaBeta(child, depth - 1, alpha, beta, false));
+                alpha = Math.max(alpha, minimaxAlphaBeta(child, depth-1, alpha, beta, false));
                 if (beta <= alpha) {
                     break;
                 }
             }
             return alpha;
         } else {
-            for (Object move:node.validMoves()) {
-                Game child = new Game(node);
+            for (String move:node.validMoves()) {
+                GameState child = new GameState(node);
                 child.move(move);
                 beta = Math.min(beta, minimaxAlphaBeta(child, depth-1, alpha, beta, true));
                 if (beta <= alpha) {
@@ -71,8 +103,7 @@ public class Minimax {
         }
     }
 
-    public double heuristic(Game gs) {
-        return gs.verifyWallPosition(gs.getP1(),gs.getP1().getWall()[0].getDir()== Wall.WDirection.HORIZONTAL?true:false, gs.getP1().getWall()[0].getLine(), gs.getP1().getWall()[0].getColumn())-
-                gs.verifyWallPosition(gs.getP2(),gs.getP2().getWall()[0].getDir()== Wall.WDirection.HORIZONTAL?true:false, gs.getP2().getWall()[0].getLine(), gs.getP2().getWall()[0].getColumn());
+    public int heuristic(GameState gs) {
+        return gs.shortestPathToRow(gs.player1Square, 0).size()-gs.shortestPathToRow(gs.player2Square, 8).size();
     }
 }

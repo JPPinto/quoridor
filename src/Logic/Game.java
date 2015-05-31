@@ -2,7 +2,6 @@ package Logic;
 
 import minimax.Dijkstra;
 import minimax.Edge;
-import minimax.Pair;
 import minimax.Vertex;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -17,10 +16,7 @@ public class Game {
     private Player p1;
     private Player p2;
     private int playerPlaying=1;
-    private boolean isOver=false;
-
-    //Minimax
-    private Vertex[][] vertices = new Vertex[17][17];
+    private ArrayList<Wall> walls;
 
     public Game(){
 
@@ -28,20 +24,7 @@ public class Game {
         board = new Board();
         p1 = new Player(0, 8, 1, "pawn1", 16);
         p2 = new Player(16, 8, 2, "pawn2", 0);
-
-        createGraph(vertices, board.getBoard());
-    }
-
-    public Game(Game game) {
-        for (int i=0; i<board.getBoard().length;i++){
-            for (int j=0; j<board.getBoard()[i].length;j++){
-                board.getBoard()[i][j]=game.getBoard().getBoard()[i][j];
-            }
-        }
-        p1=new Player(game.getP1());
-        p2=new Player(game.getP2());
-
-        createGraph(vertices, game.getBoard().getBoard());
+        walls = new ArrayList<Wall>();
     }
 
     public void makeMove(Player p, int direction){
@@ -53,21 +36,18 @@ public class Game {
 
     public void verifyWinning(Pawn p){
         if(p.getLine()==16 && p.getID()==1){
-            isOver=true;
             System.out.println("Player 1 - You win");
         }else if(p.getLine()==0 && p.getID()==2){
-            isOver=true;
             System.out.println("Player 2 - You win");
         }
     }
 
-    public boolean createWall(Player p1,Player p2, boolean horizontal_wall, int line, int column){
-        if(board.getBoard()[line][column]!= Board.BoardState.WALL && verifyWallPosition(p1, horizontal_wall, line, column)<1000 && verifyWallPosition(p2, horizontal_wall, line, column)<1000){
-            p1.addWallByIndex(p1.getWallCount(), new Wall(horizontal_wall ? Wall.WDirection.HORIZONTAL : Wall.WDirection.VERTICAL, line, column));
-            Wall wall = p1.getWallById(p1.getWallCount());
-
-            board.createWall(wall, horizontal_wall, line, column);
-            p1.incWallCount();
+    public boolean createWall(boolean horizontal_wall, int line, int column){
+        if(board.getBoard()[line][column]!= Board.BoardState.WALL && verifyWallPosition(currentPlayerPlaying(), horizontal_wall, line, column)<1000 && verifyWallPosition(otherPlayerPlaying(), horizontal_wall, line, column)<1000){
+            Wall wall = new Wall(horizontal_wall ? Wall.WDirection.HORIZONTAL : Wall.WDirection.VERTICAL, line, column);
+            walls.add(wall);
+            board.createWall(horizontal_wall, line, column);
+            currentPlayerPlaying().incWallCount();
             return true;
         }else{
             return false;
@@ -127,12 +107,11 @@ public class Game {
                 }
                 ArrayList<Edge> edges = new ArrayList<Edge>();
                 addEdge(edges, vertex, i+1, j,  cost);
-                addEdge(edges, vertex, i-1, j, cost);
-                addEdge(edges, vertex, i, j+1, cost);
+                addEdge(edges, vertex, i - 1, j, cost);
+                addEdge(edges, vertex, i, j + 1, cost);
                 addEdge(edges, vertex, i, j-1, cost);
 
-                vertex[i][j].adjacencies = new Edge[edges.size()];
-                vertex[i][j].adjacencies = edges.toArray(vertex[i][j].adjacencies);
+                vertex[i][j].adjacencies.addAll(edges);
                 cost=1;
             }
         }
@@ -196,65 +175,44 @@ public class Game {
         this.p2 = p2;
     }
 
-    public boolean isOver(){
-        return isOver;
+    public int getCurrentPlayer(){
+        return playerPlaying;
+    }
+
+    public int getOtherPlayer(){
+        if(playerPlaying==1){
+            return 2;
+        }
+        return 1;
     }
 
     public void setCurrentPlayer(int playerPlaying){
         this.playerPlaying=playerPlaying;
     }
 
-    public int getCurrentPlayer(){
-        return playerPlaying;
+    public ArrayList<Wall> getWall(){
+        return walls;
     }
 
-    public List<Object> validMoves() {
-        List<Object> validMoves = new LinkedList<Object>();
-
-        //Pawns
-        if(currentPlayerPlaying().getPawn().getLine()-1>=0 || currentPlayerPlaying().getPawn().getLine()+1<17 || currentPlayerPlaying().getPawn().getColumn()-1>=0 || currentPlayerPlaying().getPawn().getColumn()+1<17){
-            validMoves.add(currentPlayerPlaying().getPawn());
+    public Player currentPlayerPlaying(){
+        if(playerPlaying==1){
+            return p1;
         }
+        return p2;
+    }
 
-        //Walls
-        for (int i = 0; i < getBoard().getBoard().length; i++) {
-            for (int j = 0; j < getBoard().getBoard()[i].length; j++) {
-                if(i%2!=0 && j%2!=0) {
-                    for (Wall.WDirection dir : Wall.WDirection.values()) {
-                        Wall wall = new Wall(dir, i, j);
-                        if (verifyWallPosition(getP2(), dir == Wall.WDirection.HORIZONTAL ? true : false, i, j) < 1000) {
-                            validMoves.add(wall);
-                        }
-                    }
-                }
-            }
+    public Player otherPlayerPlaying(){
+        if(playerPlaying==1){
+            return p2;
         }
-        return validMoves;
+        return p1;
     }
 
-    public Player currentPlayerPlaying () {
-        return playerPlaying == 1 ? p1 : p2;
-    }
-
-    public boolean move (Object move) {
-        boolean valid = true;
-        valid &= !isOver();
-        if (move instanceof Wall) {
-            Wall wall = (Wall)move;
-            createWall(currentPlayerPlaying(), getCurrentPlayer()==1?p2:p1,wall.isHorizontal(wall.getDir()),wall.getLine(), wall.getColumn());
-        } else {
-            Pawn p = (Pawn)move;
-            movePawn(p);
+    public void nextPlayer(){
+        if(playerPlaying==1){
+            playerPlaying=2;
+        }else{
+            playerPlaying=1;
         }
-        return valid;
     }
-
-    public void movePawn (Pawn dest) {
-        currentPlayerPlaying().setPawn(dest);
-
-        /*if(vertices[dest.getLine()][dest.getColumn()].adjacencies){
-
-        }*/
-    }
-
 }
