@@ -55,10 +55,6 @@ public class GameState {
     }
 
     public GameState(Game game) {
-        player1Square = new Square(game.getP1().getPawn().getLine()/2, game.getP1().getPawn().getColumn()/2);
-        player2Square = new Square(game.getP2().getPawn().getLine()/2, game.getP2().getPawn().getColumn()/2);
-        //walls.addAll(gs.walls);
-
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 LinkedList<Square> adjacent = new LinkedList<Square>();
@@ -73,9 +69,14 @@ public class GameState {
                 adjacencyList.put(new Square(i,j), adjacent);
             }
         }
-        //placeWall(Wall wall)
+
+        player1Square = new Square(game.getP1().getPawn().getLine()/2, game.getP1().getPawn().getColumn()/2);
+        player2Square = new Square(game.getP2().getPawn().getLine()/2, game.getP2().getPawn().getColumn()/2);
+
         for (int i = 0; i < game.getWall().size(); i++) {
-            placeWall(new Wall(new Square(game.getWall().get(i).getLine(), game.getWall().get(i).getColumn()), game.getWall().get(i).getDir()));
+            Wall wall = new Wall(new Square(game.getWall().get(i).getLine(), game.getWall().get(i).getColumn()), game.getWall().get(i).getDir());
+            placeWall(wall);
+            walls.add(wall);
         }
     }
 

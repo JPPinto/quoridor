@@ -42,8 +42,6 @@ public class GamePVE {
         primaryStage.setTitle("Quoridor");
         stage=primaryStage;
         game = new Game(2);
-        GameState gs = new GameState(game);
-        System.out.println("Move: "+game.getM1().getMove(gs));
 
         //create interactive button up
         up=new Button();
@@ -54,6 +52,8 @@ public class GamePVE {
             public void handle(ActionEvent event) {
                 makeMove(0);
                 game.nextPlayer();
+                GameState gs = new GameState(game);
+                System.out.println("Move: " + game.getM1().getMove(gs));
             }
         });
 
@@ -66,6 +66,8 @@ public class GamePVE {
             public void handle(ActionEvent event) {
                 makeMove(1);
                 game.nextPlayer();
+                GameState gs = new GameState(game);
+                System.out.println("Move: " + game.getM1().getMove(gs));
             }
         });
 
@@ -78,6 +80,8 @@ public class GamePVE {
             public void handle(ActionEvent event) {
                 makeMove(2);
                 game.nextPlayer();
+                GameState gs = new GameState(game);
+                System.out.println("Move: " + game.getM1().getMove(gs));
             }
         });
 
@@ -90,6 +94,8 @@ public class GamePVE {
             public void handle(ActionEvent event) {
                 makeMove(3);
                 game.nextPlayer();
+                GameState gs = new GameState(game);
+                System.out.println("Move: " + game.getM1().getMove(gs));
             }
         });
 

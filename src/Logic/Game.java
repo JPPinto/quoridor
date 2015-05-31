@@ -5,8 +5,6 @@ import minimax.Edge;
 import minimax.Minimax;
 import minimax.Vertex;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by João on 17/04/2015.
