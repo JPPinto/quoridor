@@ -39,6 +39,17 @@ public class Game {
         walls = new ArrayList<Wall>();
     }
 
+    public Game(int depth, int depth2){
+
+        //init board and players
+        board = new Board();
+        p1 = new Player(16, 8, 1, "pawn1", 0);
+        p2 = new Player(0, 8, 2, "pawn2", 16);
+        m1 = new Minimax(depth);
+        m2 = new Minimax(depth2);
+        walls = new ArrayList<Wall>();
+    }
+
     public void makeMove(Player p, int direction){
         board.setBoard(p.getPawn(), direction);
         board.printMatrix();
@@ -54,10 +65,11 @@ public class Game {
 
     public boolean createWall(boolean horizontal_wall, int line, int column){
         if(currentPlayerPlaying().usedWallNum()<10 && board.getBoard()[line][column]!= Board.BoardState.WALL && verifyWallPosition(currentPlayerPlaying(), horizontal_wall, line, column)<1000 && verifyWallPosition(otherPlayerPlaying(), horizontal_wall, line, column)<1000){
-            Wall wall = new Wall(horizontal_wall ? Wall.WDirection.HORIZONTAL : Wall.WDirection.VERTICAL, line, column);
+            Wall wall = new Wall(horizontal_wall ? Wall.WDirection.HORIZONTAL : Wall.WDirection.VERTICAL, line, column, playerPlaying);
             walls.add(wall);
             board.createWall(horizontal_wall, line, column);
             currentPlayerPlaying().incWallCount();
+
             return true;
         }else{
             return false;

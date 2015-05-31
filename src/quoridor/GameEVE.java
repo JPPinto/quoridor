@@ -2,7 +2,6 @@ package quoridor;
 
 import Logic.Board;
 import Logic.Game;
-import Logic.Pawn;
 import Logic.Player;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,67 +26,23 @@ import minimax.Wall;
 /**
  * Created by João on 02/03/2015.
  */
-public class GamePVE {
+public class GameEVE {
 
     private Game game;
 
     private Scene scene;
     private Stage stage;
-    private Button up, down, left, right, hWall, vWall;
+    private Button hWall, vWall;
     private GridPane iBoard;
     private Label label;
 
     private boolean horizontal_wall=true;
 
-    public GamePVE(final Stage primaryStage){
+    public GameEVE(final Stage primaryStage){
 
         primaryStage.setTitle("Quoridor");
         stage=primaryStage;
-        game = new Game(2);
-
-        //create interactive button up
-        up=new Button();
-        change(up);
-        up.setId("up");
-        up.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                makeMove(0);
-            }
-        });
-
-        //create interactive button down
-        down=new Button();
-        change(down);
-        down.setId("down");
-        down.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                makeMove(1);
-            }
-        });
-
-        //create interactive button left
-        left=new Button();
-        change(left);
-        left.setId("left");
-        left.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                makeMove(2);
-            }
-        });
-
-        //create interactive button right
-        right=new Button();
-        change(right);
-        right.setId("right");
-        right.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                makeMove(3);
-            }
-        });
+        game = new Game(2,2);
 
         BorderPane root = new BorderPane();
         root.setId("root");
@@ -98,7 +53,6 @@ public class GamePVE {
         iBoard.setHgap(5);
         iBoard.setVgap(5);
         setIBoard();
-        addInteractiveButtons(game.getP1());
         Group group = new Group(iBoard);
 
         //reoraginize nodes position (vertical alignment)
@@ -112,12 +66,10 @@ public class GamePVE {
         container.getChildren().addAll(group, container2);
         root.setCenter(container);
 
-        //makeAIMove();
-        //game.nextPlayer();
-        //addInteractiveButtons(game.getP2());
-
         scene = new Scene(root, 600, 600);
         scene.getStylesheets().add("css/gamefieldpvp.css");
+
+        makeMove();
     }
 
     public void setIBoard(){
@@ -157,49 +109,14 @@ public class GamePVE {
         iBoard.add(image, p.getPawn().getColumn(), p.getPawn().getLine());
     }
 
-    public void addInteractiveButtons(Player p){
-        Pawn pawn = p.getPawn();
-
-        if(pawn.getLine()-2>=0 && game.getBoard().getBoard()[pawn.getLine()-1][pawn.getColumn()]!= Board.BoardState.WALL) {
-            if(game.getBoard().getBoard()[pawn.getLine()-2][pawn.getColumn()]!= Board.BoardState.PLAYER)
-                iBoard.add(up, pawn.getColumn(), pawn.getLine() - 2);
-            else if(pawn.getLine()-4>=0)
-                iBoard.add(up, pawn.getColumn(), pawn.getLine() - 4);
-        }
-        if(pawn.getLine()+2<17 && game.getBoard().getBoard()[pawn.getLine()+1][pawn.getColumn()]!= Board.BoardState.WALL) {
-            if(game.getBoard().getBoard()[pawn.getLine()+2][pawn.getColumn()]!= Board.BoardState.PLAYER)
-                iBoard.add(down, pawn.getColumn(), pawn.getLine() + 2);
-            else if(pawn.getLine()+4<17)
-                iBoard.add(down, pawn.getColumn(), pawn.getLine() + 4);
-        }
-        if(pawn.getColumn()-2>=0 && game.getBoard().getBoard()[pawn.getLine()][pawn.getColumn()-1]!= Board.BoardState.WALL) {
-            if(game.getBoard().getBoard()[pawn.getLine()][pawn.getColumn()-2]!= Board.BoardState.PLAYER)
-                iBoard.add(left, pawn.getColumn() - 2, pawn.getLine());
-            else if(pawn.getColumn()-4>=0)
-                iBoard.add(left, pawn.getColumn() - 4, pawn.getLine());
-        }
-        if(pawn.getColumn()+2<17 && game.getBoard().getBoard()[pawn.getLine()][pawn.getColumn()+1]!= Board.BoardState.WALL) {
-            if(game.getBoard().getBoard()[pawn.getLine()][pawn.getColumn()+2]!= Board.BoardState.PLAYER)
-                iBoard.add(right, pawn.getColumn() + 2, pawn.getLine());
-            else if(pawn.getColumn()+4<17)
-                iBoard.add(right, pawn.getColumn() + 4, pawn.getLine());
-        }
-    }
-
-    public void makeMove(int direction){
-        clearIBoard();
-        game.makeMove(game.currentPlayerPlaying(), direction);
-        game.verifyWinning(game.currentPlayerPlaying().getPawn());
-        game.nextTurn();
-        setIBoard();
-        label.setText("       Player " + game.getCurrentPlayer() + "\n       Walls: " + game.currentPlayerPlaying().leftWallNum());
-        game.nextPlayer();
-
+    public void makeMove(){
         makeAIMove();
         game.verifyWinning(game.currentPlayerPlaying().getPawn());
         game.nextTurn();
+        label.setText("       Player " + game.getCurrentPlayer() + "\n       Walls: " + game.currentPlayerPlaying().leftWallNum());
         game.nextPlayer();
-        addInteractiveButtons(game.getP1());
+
+        makeMove();
     }
 
     public void makeAIMove(){
@@ -209,7 +126,7 @@ public class GamePVE {
         if(obj instanceof Wall){
             System.out.println("Move: "+((Wall) obj).toString());
             System.out.println("Placing WALL on Row:  " + ((Wall) obj).getNorthWest().getRow() + " Colunm: " + ((Wall) obj).getNorthWest().getColumn());
-            System.out.println("Placing WALL on Row:  " + ((Wall) obj).getNorthWest().getRow() * 2+1 + " Colunm: " + ((Wall) obj).getNorthWest().getColumn() * 2+1);
+            System.out.println("Placing WALL on Row:  " + (((Wall) obj).getNorthWest().getRow() * 2+1) + " Colunm: " + (((Wall) obj).getNorthWest().getColumn() * 2+1));
             game.createWall(((Wall) obj).getOrientation()== Logic.Wall.WDirection.HORIZONTAL?true:false, ((Wall) obj).getNorthWest().getRow() * 2+1, ((Wall) obj).getNorthWest().getColumn() * 2+1);
             //    game.getCurrentPlayer()==gs.addNumWalls2();
             //}
@@ -300,16 +217,6 @@ public class GamePVE {
         node.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-
-                try {
-                    if(!game.createWall(horizontal_wall, GridPane.getRowIndex(node), GridPane.getColumnIndex(node))){
-                        System.out.println("You cant place wall there! Play again");
-                    }else{
-                        makeMove(4);
-                    }
-                }catch(ArrayIndexOutOfBoundsException ex){
-                    System.out.println("You reach the maximun walls");
-                }
             }
         });
     }

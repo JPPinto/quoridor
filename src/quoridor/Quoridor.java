@@ -75,7 +75,8 @@ public class Quoridor extends Application {
         eve.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("CPUvCPU");
+                GameEVE gamepve=new GameEVE(primaryStage);
+                primaryStage.setScene(gamepve.getScene());
             }
         });
 

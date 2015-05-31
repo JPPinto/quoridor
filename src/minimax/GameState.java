@@ -26,6 +26,7 @@ public class GameState {
     int numWalls2 = 0;
     int turn = 0;
 
+    Game game;
     /**
      * No args contructor. Initializes the adjacency list.
      */
@@ -84,9 +85,8 @@ public class GameState {
         player2Square = new Square(game.getP2().getPawn().getLine()/2, game.getP2().getPawn().getColumn()/2);
 
         for (int i = 0; i < game.getWall().size(); i++) {
-            Wall wall = new Wall(new Square(game.getWall().get(i).getLine(), game.getWall().get(i).getColumn()), game.getWall().get(i).getDir());
-            placeWall(wall);
-            walls.add(wall);
+            Wall wall = new Wall(new Square(game.getWall().get(i).getLine()/2, game.getWall().get(i).getColumn()/2), game.getWall().get(i).getDir());
+            placeWall(wall, game.getWall().get(i).getOwningPlayer());
         }
         turn=game.getTurn();
     }
@@ -343,7 +343,7 @@ public class GameState {
             Wall wall = new Wall(move);
             valid &= isValidWallPlacement(wall);
             if (valid) {
-                placeWall(wall);
+                placeWall(wall, currentPlayer()+1);
             }
         } else {
             Square sq = new Square(move);
@@ -370,8 +370,8 @@ public class GameState {
      * Called after validity check passes. Update fields accordingly, e.g. add walls, etc.
      * @param wall
      */
-    protected void placeWall(Wall wall) {
-        if (currentPlayer()==0) {
+    protected void placeWall(Wall wall, int owningPlayer) {
+        if (owningPlayer == 1) {
             numWalls1++;
         } else {
             numWalls2++;
@@ -562,5 +562,12 @@ public class GameState {
             }
         }
         return validMoves;
+    }
+
+    public void addNumWalls2(){
+        numWalls2++;
+    }
+    public void addNumWalls1(){
+        numWalls1++;
     }
 }

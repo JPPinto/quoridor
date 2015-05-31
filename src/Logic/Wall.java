@@ -12,11 +12,13 @@ public class Wall {
     private WDirection dir;
     private int line;
     private int column;
+    private int owningPlayer;
 
-    public Wall(WDirection dir, int line, int column){
+    public Wall(WDirection dir, int line, int column, int oP){
         this.setDir(dir);
         this.setLine(line);
         this.setColumn(column);
+        this.setOwningPlayer(oP);
     }
 
     public WDirection getDir() {
@@ -45,5 +47,13 @@ public class Wall {
 
     public boolean isHorizontal(WDirection dir){
         return dir==WDirection.HORIZONTAL?true:false;
+    }
+
+    public int getOwningPlayer() {
+        return owningPlayer;
+    }
+
+    public void setOwningPlayer(int owningPlayer) {
+        this.owningPlayer = owningPlayer;
     }
 }
