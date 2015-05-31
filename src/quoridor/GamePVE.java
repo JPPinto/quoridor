@@ -215,6 +215,7 @@ public class GamePVE {
             //}
         }else{
             System.out.println("line = "+(((Square)obj).getRow())+"|column = "+(((Square)obj).getColumn()));
+            game.getBoard().getBoard()[game.getP2().getPawn().getLine()][game.getP2().getPawn().getColumn()]= Board.BoardState.BLOCK;
             game.getP2().getPawn().setLine(((Square) obj).getRow() * 2);
             game.getP2().getPawn().setColumn(((Square)obj).getColumn()*2);
             game.getBoard().getBoard()[((Square)obj).getRow()*2][((Square)obj).getColumn()*2]= Board.BoardState.PLAYER;

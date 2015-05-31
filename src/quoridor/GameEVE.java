@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import minimax.GameState;
+import minimax.Minimax;
 import minimax.Square;
 import minimax.Wall;
 
@@ -32,7 +33,7 @@ public class GameEVE {
 
     private Scene scene;
     private Stage stage;
-    private Button hWall, vWall;
+    private Button hWall, vWall, but;
     private GridPane iBoard;
     private Label label;
 
@@ -68,8 +69,6 @@ public class GameEVE {
 
         scene = new Scene(root, 600, 600);
         scene.getStylesheets().add("css/gamefieldpvp.css");
-
-        makeMove();
     }
 
     public void setIBoard(){
@@ -109,22 +108,20 @@ public class GameEVE {
         iBoard.add(image, p.getPawn().getColumn(), p.getPawn().getLine());
     }
 
-    public void makeMove(){
-        makeAIMove();
+    public void makeMove(Minimax m){
+        makeAIMove(m);
         game.verifyWinning(game.currentPlayerPlaying().getPawn());
         game.nextTurn();
         label.setText("       Player " + game.getCurrentPlayer() + "\n       Walls: " + game.currentPlayerPlaying().leftWallNum());
         game.nextPlayer();
-
-        makeMove();
     }
 
-    public void makeAIMove(){
+    public void makeAIMove(Minimax m){
         clearIBoard();
         GameState gs = new GameState(game);
-        Object obj = game.getM1().fromString(game.getM1().getMove(gs));
+        Object obj = m.fromString(m.getMove(gs));
         if(obj instanceof Wall){
-            System.out.println("Move: "+((Wall) obj).toString());
+            System.out.println("Wall: "+((Wall) obj).toString());
             System.out.println("Placing WALL on Row:  " + ((Wall) obj).getNorthWest().getRow() + " Colunm: " + ((Wall) obj).getNorthWest().getColumn());
             System.out.println("Placing WALL on Row:  " + (((Wall) obj).getNorthWest().getRow() * 2+1) + " Colunm: " + (((Wall) obj).getNorthWest().getColumn() * 2+1));
             game.createWall(((Wall) obj).getOrientation()== Logic.Wall.WDirection.HORIZONTAL?true:false, ((Wall) obj).getNorthWest().getRow() * 2+1, ((Wall) obj).getNorthWest().getColumn() * 2+1);
@@ -132,10 +129,12 @@ public class GameEVE {
             //}
         }else{
             System.out.println("line = "+(((Square)obj).getRow())+"|column = "+(((Square)obj).getColumn()));
-            game.getP2().getPawn().setLine(((Square) obj).getRow() * 2);
-            game.getP2().getPawn().setColumn(((Square)obj).getColumn()*2);
+            game.getBoard().getBoard()[game.currentPlayerPlaying().getPawn().getLine()][game.currentPlayerPlaying().getPawn().getColumn()]= Board.BoardState.BLOCK;
+            game.currentPlayerPlaying().getPawn().setLine(((Square) obj).getRow() * 2);
+            game.currentPlayerPlaying().getPawn().setColumn(((Square)obj).getColumn()*2);
             game.getBoard().getBoard()[((Square)obj).getRow()*2][((Square)obj).getColumn()*2]= Board.BoardState.PLAYER;
         }
+        game.getBoard().printMatrix();
         setIBoard();
     }
 
@@ -259,6 +258,20 @@ public class GameEVE {
             }
         });
 
+        but=new Button();
+        change(but);
+        but.setId("right");
+        but.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(game.getCurrentPlayer()==1){
+                    makeMove(game.getM1());
+                }else{
+                    makeMove(game.getM2());
+                }
+            }
+        });
+
         label = new Label("       Player " + game.getCurrentPlayer() + "\n       Walls: " + game.currentPlayerPlaying().leftWallNum());//info to player 1
         label.setContentDisplay(ContentDisplay.CENTER);
 
@@ -269,6 +282,7 @@ public class GameEVE {
         gamepvp_buttons.add(hWall, 2, 1);
         gamepvp_buttons.add(vWall, 3, 1);
         gamepvp_buttons.add(label, 4, 1);
+        gamepvp_buttons.add(but, 5, 1);
         gamepvp_buttons.setAlignment(Pos.CENTER);
 
         return gamepvp_buttons;
