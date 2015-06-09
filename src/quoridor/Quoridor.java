@@ -1,7 +1,12 @@
 package quoridor;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,6 +28,7 @@ public class Quoridor extends Application {
     public Font font;
 
     private Scene scene;
+    private int dif=1;
 
     public static void main(String[] args) {
         launch(args);
@@ -64,7 +70,7 @@ public class Quoridor extends Application {
         pve.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GamePVE gamepve=new GamePVE(primaryStage);
+                GamePVE gamepve=new GamePVE(primaryStage, dif);
                 primaryStage.setScene(gamepve.getScene());
             }
         });
@@ -101,6 +107,21 @@ public class Quoridor extends Application {
             }
         });
 
+        ArrayList<Integer> choices = new ArrayList<Integer>();
+        choices.add(1);
+        choices.add(2);
+        choices.add(3);
+        choices.add(4);
+        final ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList(choices));
+        cb.getSelectionModel().select(dif-1);
+        cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                String value = cb.getItems().get((Integer) number2).toString().replaceAll("[^0-9]", "");
+                dif = Integer.parseInt(value);
+            }
+        });
+
         GridPane grid = new GridPane();
         grid.setVgap(20);
         grid.setHgap(20);
@@ -109,6 +130,7 @@ public class Quoridor extends Application {
         grid.add(eve, 1, 3);
         grid.add(rules, 1, 4);
         grid.add(exit,1,5);
+        grid.add(cb,1,6);
         grid.setAlignment(Pos.CENTER);
 
         BorderPane root = new BorderPane();

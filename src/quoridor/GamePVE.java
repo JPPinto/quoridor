@@ -39,11 +39,11 @@ public class GamePVE {
 
     private boolean horizontal_wall=true;
 
-    public GamePVE(final Stage primaryStage){
+    public GamePVE(final Stage primaryStage, int dif){
 
         primaryStage.setTitle("Quoridor");
         stage=primaryStage;
-        game = new Game(2);
+        game = new Game(dif);
 
         //create interactive button up
         up=new Button();
